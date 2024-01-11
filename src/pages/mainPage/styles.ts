@@ -1,15 +1,15 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-export const Content = styled.div` 
+export const Content = styled.div`
+  height: 100%;
+
+  .chakra-tabs {
     height: 100%;
-    
-    .chakra-tabs {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
-export const MainContet = styled.div` 
-   flex: 1;
-`
+export const MainContent = styled.div`
+  flex: 1;
+`;

@@ -1,43 +1,31 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react"
-import { Dashboard } from "../dashboard"
-import { ListTask } from "../listTask"
-import { Content, MainContet } from "./styles";
+import { TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { Dashboard } from "../dashboard";
+import { TaskList } from "../taskList";
+import { Content, MainContent } from "./styles";
+import { TabMenu } from "./components/tabMenu";
 
 export const MainPage = () => {
-    const { innerWidth } = window;
-    const isMobileScreen = innerWidth <= 600;
+  const { innerWidth } = window;
+  const isMobileScreen = innerWidth <= 600;
 
-    return (<Content>
-        <Tabs isFitted variant='enclosed'  height=' auto'>
-            {
-                !isMobileScreen && (
-                    <TabList >
-                        <Tab>One</Tab>
-                        <Tab>Two</Tab>
-                    </TabList>
-                )
-            }
+  return (
+    <Content>
+      <Tabs isFitted variant="enclosed" height=" auto">
+        {!isMobileScreen && <TabMenu />}
 
-            <MainContet>
-                <TabPanels>
-                    <TabPanel>
-                        <Dashboard />
-                    </TabPanel>
-                    <TabPanel>
-                        <ListTask />
-                    </TabPanel>
-                </TabPanels>
-            </MainContet>
+        <MainContent>
+          <TabPanels>
+            <TabPanel>
+              <Dashboard />
+            </TabPanel>
+            <TabPanel>
+              <TaskList />
+            </TabPanel>
+          </TabPanels>
+        </MainContent>
 
-            {
-                isMobileScreen && (
-                    <TabList >
-                        <Tab>One</Tab>
-                        <Tab>Two</Tab>
-                    </TabList>
-                )
-            }
-        </Tabs>
+        {isMobileScreen && <TabMenu />}
+      </Tabs>
     </Content>
-    )
-}
+  );
+};
