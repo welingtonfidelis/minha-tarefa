@@ -1,0 +1,37 @@
+import { I18nextProvider } from "react-i18next";
+import { ThemeProvider } from "styled-components";
+import { ChakraProvider } from "@chakra-ui/react";
+
+import i18n from "./config/18n";
+import { Preloader } from "./components/preloader";
+
+import { GlobalStyles } from "./global.styles";
+import { light } from "./config/styles/styled-component-theme";
+import { theme } from "./config/styles/chackra-ui-theme";
+import { MainPage } from "./pages/mainPage";
+
+export const App = () => {
+  return (
+    <ChakraProvider
+      theme={theme}
+      toastOptions={{
+        defaultOptions: {
+          position: "top-right",
+          isClosable: true,
+          duration: 5000,
+          status: "success",
+          containerStyle: { maxWidth: '300px' }
+        },
+      }}
+    >
+      <I18nextProvider i18n={i18n}>
+        <ThemeProvider theme={light}>
+          <GlobalStyles />
+          <Preloader isLoading={false}>
+            <MainPage />
+          </Preloader>
+        </ThemeProvider>
+      </I18nextProvider>
+    </ChakraProvider>
+  );
+};
