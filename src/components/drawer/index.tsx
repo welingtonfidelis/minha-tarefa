@@ -32,9 +32,9 @@ export const Drawer = (props: PropsWithChildren<Props>) => {
     <DrawerChakra onClose={onClose} isOpen={isOpen} size="lg">
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader>{title}</DrawerHeader>
+        <DrawerHeader padding={'1rem'}>{title}</DrawerHeader>
         <DrawerCloseButton />
-        <DrawerBody>{children}</DrawerBody>
+        <DrawerBody padding={'1rem'}>{children}</DrawerBody>
         {showActionButtons && (
           <DrawerFooter>
             {extraActionButton}
