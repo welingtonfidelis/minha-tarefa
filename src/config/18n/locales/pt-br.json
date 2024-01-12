@@ -9,9 +9,6 @@
       "title_message": "Oops!",
       "description_message": "Página não encontrada"
     },
-    "dashboard": {
-      "page_title": "Dashboard"
-    },
     "task_list": {
       "page_title": "Lista de tarefas",
       "table_action_edit": "Editar",
