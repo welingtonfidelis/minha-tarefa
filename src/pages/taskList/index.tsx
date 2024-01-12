@@ -1,16 +1,16 @@
 import { EmptyState } from "../../components/emptyState";
-import { Container } from "./styles";
+import { Content } from "./styles";
 import { PageFilter } from "./components/pageFilter";
 import { DrawerEditTask } from "./components/drawerEditTask";
 
 export const TaskList = () => {
   return (
-    <Container>
+    <Content>
       <PageFilter />
 
       <EmptyState />
 
       <DrawerEditTask />
-    </Container>
+    </Content>
   );
 };
