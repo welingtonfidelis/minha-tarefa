@@ -11,12 +11,6 @@
     },
     "task_list": {
       "page_title": "Lista de tarefas",
-      "table_action_edit": "Editar",
-      "table_action_block": "Bloquear",
-      "table_action_unblock": "Desbloquear",
-      "table_action_delete": "Excluir",
-      "table_action_update_password": "Alterar senha",
-      "input_search_id":  "Código",
       "input_search_name":  "Nome",
       "button_new_task": "Nova Tarefa",
       "alert_title_block_user": "Bloquear usuário",
@@ -32,7 +26,12 @@
       "components": {
         "drawer_task": {
           "new_task_title": "Nova Tarefa",
-          "edit_task_title": "Editar Tarefa"
+          "edit_task_title": "Editar Tarefa",
+          "input_name": "Nome",
+          "input_description": "Descrição (opcional)",
+          "input_items": "Items",
+          "input_item_name": "Nome do item",
+          "button_add_item": "Adicionar item"
         }
       }
     }
