@@ -13,16 +13,6 @@
       "page_title": "Lista de tarefas",
       "input_search_name":  "Nome",
       "button_new_task": "Nova Tarefa",
-      "alert_title_block_user": "Bloquear usuário",
-      "alert_description_block_user": "Deseja realmente bloquear este usuário ({{name}})?",
-      "alert_title_unblock_user": "Desbloquear usuário",
-      "alert_description_unblock_user": "Deseja realmente desbloquear este usuário ({{name}})?",
-      "alert_title_delete_user": "Excluir usuário",
-      "alert_description_delete_user": "Deseja realmente excluir este usuário ({{name}})?",
-      "success_request_block_message": "Sucesso! Usuário atualizado.",
-      "error_request_block_message": "Algo deu errado. Por favor, verifique as informações e tente novamente.",
-      "success_request_delete_message": "Sucesso! Usuário excluído.",
-      "error_request_delete_message": "Algo deu errado. Por favor, verifique as informações e tente novamente.",
       "components": {
         "drawer_task": {
           "new_task_title": "Nova Tarefa",
@@ -31,7 +21,11 @@
           "input_description": "Descrição (opcional)",
           "input_items": "Items",
           "input_item_name": "Nome do item",
-          "button_add_item": "Adicionar item"
+          "button_add_item": "Adicionar item",
+          "success_request_new_message": "Sucesso! Tarefa criada.",
+          "error_request_new_message": "Erro! Houve um erro ao tentar criar a tarefa.",
+          "success_request_edit_message": "Sucesso! Tarefa alterada.",
+          "error_request_edit_message": "Erro! Houve um erro ao tentar alterar a tarefa."
         }
       }
     }
@@ -45,6 +39,7 @@
     "button_back": "Voltar",
     "button_ok": "Ok",
     "button_send": "Enviar",
+    "button_delete": "Deletar",
     "required_input_value": "Campo obrigatório"
   }
 }
