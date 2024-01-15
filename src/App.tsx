@@ -8,7 +8,7 @@ import { Preloader } from "./components/preloader";
 import { GlobalStyles } from "./global.styles";
 import { light } from "./config/styles/styled-component-theme";
 import { theme } from "./config/styles/chackra-ui-theme";
-import { TaskList } from "./pages/taskList";
+import { MainPage } from "./pages/mainPage";
 
 export const App = () => {
   return (
@@ -28,7 +28,7 @@ export const App = () => {
         <ThemeProvider theme={light}>
           <GlobalStyles />
           <Preloader isLoading={false}>
-            <TaskList />
+            <MainPage />
           </Preloader>
         </ThemeProvider>
       </I18nextProvider>

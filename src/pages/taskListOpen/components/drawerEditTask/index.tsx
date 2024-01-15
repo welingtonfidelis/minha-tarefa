@@ -59,13 +59,13 @@ export const DrawerEditTask = () => {
       await createTask(values);
 
       toast({
-        title: t("pages.task_list.components.drawer_task.success_request_new_message"),
+        title: t("pages.task_list_open.components.drawer_task.success_request_new_message"),
       });
 
       updateIsDrawerEditOpen(false);
     } catch (error) {
       toast({
-        title: t("pages.task_list.components.drawer_task.error_request_new_message"),
+        title: t("pages.task_list_open.components.drawer_task.error_request_new_message"),
         status: "error",
       });
     }
@@ -75,8 +75,8 @@ export const DrawerEditTask = () => {
     <Drawer
       title={
         selectedTaskId
-          ? t("pages.task_list.components.drawer_task.edit_task_title")
-          : t("pages.task_list.components.drawer_task.new_task_title")
+          ? t("pages.task_list_open.components.drawer_task.edit_task_title")
+          : t("pages.task_list_open.components.drawer_task.new_task_title")
       }
       onConfirm={() => formRef.current?.handleSubmit()}
       isOpen={isDrawerOpen}
@@ -96,12 +96,12 @@ export const DrawerEditTask = () => {
                 {({ field }: any) => (
                   <FormControl isInvalid={!!errors.name && touched.name}>
                     <FormLabel mt="2" mb="0.2">
-                      {t("pages.task_list.components.drawer_task.input_name")}
+                      {t("pages.task_list_open.components.drawer_task.input_name")}
                     </FormLabel>
                     <Input
                       {...field}
                       placeholder={t(
-                        "pages.task_list.components.drawer_task.input_name"
+                        "pages.task_list_open.components.drawer_task.input_name"
                       )}
                     />
                     <FormErrorMessage>{errors.name}</FormErrorMessage>
@@ -116,14 +116,14 @@ export const DrawerEditTask = () => {
                   >
                     <FormLabel mt="2" mb="0.2">
                       {t(
-                        "pages.task_list.components.drawer_task.input_description"
+                        "pages.task_list_open.components.drawer_task.input_description"
                       )}
                     </FormLabel>
                     <Textarea
                       {...field}
                       resize="none"
                       placeholder={t(
-                        "pages.task_list.components.drawer_task.input_description"
+                        "pages.task_list_open.components.drawer_task.input_description"
                       )}
                     />
                     <FormErrorMessage>{errors.description}</FormErrorMessage>
@@ -132,7 +132,7 @@ export const DrawerEditTask = () => {
               </Field>
 
               <FormLabel>
-                {t("pages.task_list.components.drawer_task.input_items")}
+                {t("pages.task_list_open.components.drawer_task.input_items")}
               </FormLabel>
               <ItemInputContent>
                 <FieldArray
@@ -151,7 +151,7 @@ export const DrawerEditTask = () => {
                                 <Input
                                   {...field}
                                   placeholder={t(
-                                    "pages.task_list.components.drawer_task.input_item_name"
+                                    "pages.task_list_open.components.drawer_task.input_item_name"
                                   )}
                                 />
                                 <FormErrorMessage>
@@ -174,7 +174,7 @@ export const DrawerEditTask = () => {
                         colorScheme="green"
                       >
                         {t(
-                          "pages.task_list.components.drawer_task.button_add_item"
+                          "pages.task_list_open.components.drawer_task.button_add_item"
                         )}
                       </Button>
                     </>

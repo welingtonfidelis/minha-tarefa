@@ -13,10 +13,10 @@ export const PageFilter = () => {
     <Content>
       <DebounceInput
         debounceTimeout={500}
-        placeholder={t("pages.task_list.input_search_name")}
+        placeholder={t("pages.task_list_open.input_search_name")}
         type="text"
         marginEnd={3}
-        value={filters.filter_by_name}
+        value={filters.filterByName}
         onChange={(e) => updateFilterByName(e.target.value)}
         element={(field: any) => <Input {...field} />}
       />
@@ -26,7 +26,7 @@ export const PageFilter = () => {
         colorScheme="blue"
         onClick={() => updateIsDrawerEditOpen(true)}
       >
-        {t("pages.task_list.button_new_task")}
+        {t("pages.task_list_open.button_new_task")}
       </Button>
     </Content>
   );

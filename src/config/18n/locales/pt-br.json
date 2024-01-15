@@ -9,7 +9,7 @@
       "title_message": "Oops!",
       "description_message": "Página não encontrada"
     },
-    "task_list": {
+    "task_list_open": {
       "page_title": "Lista de tarefas",
       "input_search_name":  "Nome",
       "button_new_task": "Nova Tarefa",
