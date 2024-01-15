@@ -1,13 +1,16 @@
 import Dexie, { Table } from "dexie";
-import { UserFullDB } from "./user/types";
+import { TaskFullDB } from "./task/types";
+import { ItemTaskFullDB } from "./itemTask/types";
 
 export class DB extends Dexie {
-  users!: Table<UserFullDB>;
+  tasks!: Table<TaskFullDB>;
+  item_tasks!: Table<ItemTaskFullDB>;
 
   constructor() {
-    super("base_project_front_db");
+    super("minha_tarefa_db");
     this.version(1).stores({
-      users: "++id, username, email",
+      tasks: "++id, name",
+      item_tasks: "++id, taskId",
     });
   }
 }
