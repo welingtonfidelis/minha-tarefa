@@ -4,11 +4,11 @@ import { State, Action } from "./types";
 const initialState = {
   filters: {
     page: 1,
-    filter_by_id: "",
-    filter_by_name: "",
+    filterByIdd: "",
+    filterByName: "",
   },
-  is_drawer_edit_open: false,
-  selected_task_id: null,
+  isDrawerOpen: false,
+  selectedTaskId: null,
 };
 
 export const taskListPageStore = create<State & Action>((set) => ({
@@ -21,7 +21,7 @@ export const taskListPageStore = create<State & Action>((set) => ({
   updateFilterByName: (data) => {
     return set((state) => {
       const filters = {
-        filters: { ...state.filters, filter_by_name: data },
+        filters: { ...state.filters, filterByName: data },
       };
 
       return filters;
@@ -29,10 +29,10 @@ export const taskListPageStore = create<State & Action>((set) => ({
   },
 
   updateIsDrawerEditOpen: (data) => {
-    return set((state) => ({ ...state, is_drawer_edit_open: data }));
+    return set((state) => ({ ...state, isDrawerOpen: data }));
   },
 
   updateSelectedTaskId: (data) => {
-    return set((state) => ({ ...state, selected_task_id: data }));
+    return set((state) => ({ ...state, selectedTaskId: data }));
   },
 }));

@@ -6,10 +6,10 @@ export const FiltersType = {
 export type State = {
   filters: {
     page: number;
-    filter_by_name: string;
+    filterByName: string;
   };
-  is_drawer_edit_open: boolean;
-  selected_task_id: number | null;
+  isDrawerOpen: boolean;
+  selectedTaskId: number | null;
 };
 
 export type Action = {
