@@ -20,15 +20,19 @@ import {
   FormLabel,
   Input,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { IconMinus, ItemContent, ItemInputContent } from "./styles";
 import { IconButton } from "../../../../components/iconButton";
+import { useTask } from "../../../../hooks/useTask";
 
 export const DrawerEditTask = () => {
   const { t } = useTranslation();
-  const { is_drawer_edit_open, selected_task_id, updateIsDrawerEditOpen } =
+  const { isDrawerOpen, selectedTaskId, updateIsDrawerEditOpen } =
     taskListPageStore();
   const validateFormFields = formValidate();
+  const { createTask } = useTask();
+  const toast = useToast();
 
   const formRef = useRef<FormikProps<FormProps>>(null);
 
@@ -38,51 +42,44 @@ export const DrawerEditTask = () => {
       description: "",
       items: ["itemA", "itemB"],
     }),
-    [selected_task_id]
+    [selectedTaskId]
   );
 
   const handleSubmit = async (
     values: FormProps,
     actions: FormikHelpers<FormProps>
   ) => {
-    if (selected_task_id) {
+    if (selectedTaskId) {
       console.log("update", values);
-
-      // updateEvent(
-      //   { id: Number(id), data: values },
-      //   {
-      //     onSuccess() {
-      //       toast({
-      //         title: t("components.event_detail.success_request_new_message"),
-      //       });
-
-      //       handleCloseModal();
-      //       refetchList();
-      //     },
-      //     onError(error) {
-      //       toast({
-      //         title: t("components.event_detail.error_request_new_message"),
-      //         status: "error",
-      //       });
-      //     },
-      //   }
-      // );
 
       return;
     }
 
-    console.log("create", values);
+    try {
+      await createTask(values);
+
+      toast({
+        title: t("pages.task_list.components.drawer_task.success_request_new_message"),
+      });
+
+      updateIsDrawerEditOpen(false);
+    } catch (error) {
+      toast({
+        title: t("pages.task_list.components.drawer_task.error_request_new_message"),
+        status: "error",
+      });
+    }
   };
 
   return (
     <Drawer
       title={
-        selected_task_id
+        selectedTaskId
           ? t("pages.task_list.components.drawer_task.edit_task_title")
           : t("pages.task_list.components.drawer_task.new_task_title")
       }
       onConfirm={() => formRef.current?.handleSubmit()}
-      isOpen={is_drawer_edit_open}
+      isOpen={isDrawerOpen}
       onClose={() => updateIsDrawerEditOpen(false)}
       onConfirmLoading={false}
     >
@@ -142,7 +139,7 @@ export const DrawerEditTask = () => {
                   name="items"
                   render={(arrayHelpers) => (
                     <>
-                      {values.items.map((item, index) => (
+                      {values.items.map((_, index) => (
                         <ItemContent key={index}>
                           <Field name={`items.${index}`}>
                             {({ field }: any) => (
@@ -167,7 +164,7 @@ export const DrawerEditTask = () => {
                           <IconButton
                             icon={<IconMinus />}
                             onClick={() => arrayHelpers.remove(index)}
-                            title="test"
+                            title={t("generic.button_delete")}
                           />
                         </ItemContent>
                       ))}
