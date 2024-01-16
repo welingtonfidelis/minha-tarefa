@@ -1,8 +1,11 @@
-import { ITemTask } from "./itemTask";
+import { ItemTask } from "./itemTask";
 
 export interface Task {
   id: number;
   name: string;
   description: string;
-  items: ITemTask[];
+  checked: 0 | 1;
+  createdAt: Date;
+  closedAt?: Date;
+  items: ItemTask[];
 }

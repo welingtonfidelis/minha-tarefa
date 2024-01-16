@@ -1,5 +1,3 @@
-import { ITemTask } from "../../../domains/itemTask";
+import { ItemTask } from "../../../domains/itemTask";
 
-export interface ItemTaskFullDB extends Omit<ITemTask, 'id'> {
-    id?: number;
-}
+export interface CreateItemTaskData extends Omit<ItemTask, 'id'> {}

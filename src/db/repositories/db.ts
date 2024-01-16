@@ -1,15 +1,15 @@
 import Dexie, { Table } from "dexie";
-import { TaskFullDB } from "./task/types";
-import { ItemTaskFullDB } from "./itemTask/types";
+import { Task } from "../../domains/task";
+import { ItemTask } from "../../domains/itemTask";
 
 export class DB extends Dexie {
-  tasks!: Table<TaskFullDB>;
-  item_tasks!: Table<ItemTaskFullDB>;
+  tasks!: Table<Omit<Task, 'items'>>;
+  item_tasks!: Table<ItemTask>;
 
   constructor() {
     super("minha_tarefa_db");
     this.version(1).stores({
-      tasks: "++id, name",
+      tasks: "++id, name, closedAt, checked",
       item_tasks: "++id, taskId",
     });
   }

@@ -24,7 +24,7 @@
     "react-i18next": "^11.18.5",
     "react-icons": "^4.4.0",
     "react-pagination-bar": "^2.0.1",
-    "react-query": "^3.39.2",
+    "react-query": "^3.39.3",
     "styled-components": "^5.3.5",
     "yup": "^0.32.11",
     "zustand": "^4.1.1"

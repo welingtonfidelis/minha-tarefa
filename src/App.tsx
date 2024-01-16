@@ -9,8 +9,11 @@ import { GlobalStyles } from "./global.styles";
 import { light } from "./config/styles/styled-component-theme";
 import { theme } from "./config/styles/chackra-ui-theme";
 import { MainPage } from "./pages/mainPage";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 export const App = () => {
+  const queryClient = new QueryClient();
+
   return (
     <ChakraProvider
       theme={theme}
@@ -20,16 +23,18 @@ export const App = () => {
           isClosable: true,
           duration: 5000,
           status: "success",
-          containerStyle: { maxWidth: '300px' }
+          containerStyle: { maxWidth: "300px" },
         },
       }}
     >
       <I18nextProvider i18n={i18n}>
         <ThemeProvider theme={light}>
-          <GlobalStyles />
-          <Preloader isLoading={false}>
-            <MainPage />
-          </Preloader>
+          <QueryClientProvider client={queryClient}>
+            <GlobalStyles />
+            <Preloader isLoading={false}>
+              <MainPage />
+            </Preloader>
+          </QueryClientProvider>
         </ThemeProvider>
       </I18nextProvider>
     </ChakraProvider>

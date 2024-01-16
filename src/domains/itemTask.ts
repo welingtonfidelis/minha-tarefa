@@ -1,6 +1,6 @@
-export interface ITemTask {
+export interface ItemTask {
   id: number;
   taskId: number;
   name: string;
-  checked: boolean;
+  checked: 0 | 1;
 }

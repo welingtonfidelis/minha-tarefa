@@ -24,14 +24,17 @@ import {
 } from "@chakra-ui/react";
 import { IconMinus, ItemContent, ItemInputContent } from "./styles";
 import { IconButton } from "../../../../components/iconButton";
-import { useTask } from "../../../../hooks/useTask";
+import {
+  useCreateTask,
+  useGetTasks,
+} from "../../../../services/requests/tasks";
 
 export const DrawerEditTask = () => {
   const { t } = useTranslation();
-  const { isDrawerOpen, selectedTaskId, updateIsDrawerEditOpen } =
-    taskListPageStore();
+  const { filters, isDrawerOpen, selectedTaskId, updateIsDrawerEditOpen } = taskListPageStore();
   const validateFormFields = formValidate();
-  const { createTask } = useTask();
+  const { mutate: createTask } = useCreateTask();
+  const { refetch } = useGetTasks(filters);
   const toast = useToast();
 
   const formRef = useRef<FormikProps<FormProps>>(null);
@@ -55,20 +58,26 @@ export const DrawerEditTask = () => {
       return;
     }
 
-    try {
-      await createTask(values);
+    createTask(values, {
+      onSuccess(data) {
+        toast({
+          title: t(
+            "pages.task_list_open.components.drawer_task.success_request_new_message"
+          ),
+        });
 
-      toast({
-        title: t("pages.task_list_open.components.drawer_task.success_request_new_message"),
-      });
-
-      updateIsDrawerEditOpen(false);
-    } catch (error) {
-      toast({
-        title: t("pages.task_list_open.components.drawer_task.error_request_new_message"),
-        status: "error",
-      });
-    }
+        refetch();
+        updateIsDrawerEditOpen(false);
+      },
+      onError(error) {
+        toast({
+          title: t(
+            "pages.task_list_open.components.drawer_task.error_request_new_message"
+          ),
+          status: "error",
+        });
+      },
+    });
   };
 
   return (
@@ -96,7 +105,9 @@ export const DrawerEditTask = () => {
                 {({ field }: any) => (
                   <FormControl isInvalid={!!errors.name && touched.name}>
                     <FormLabel mt="2" mb="0.2">
-                      {t("pages.task_list_open.components.drawer_task.input_name")}
+                      {t(
+                        "pages.task_list_open.components.drawer_task.input_name"
+                      )}
                     </FormLabel>
                     <Input
                       {...field}

@@ -1,5 +1,5 @@
 import { DB, mockDB } from "../db";
-import { ItemTaskFullDB } from "./types";
+import { CreateItemTaskData } from "./types";
 
 class ItemTaskDB {
   db: DB;
@@ -8,8 +8,12 @@ class ItemTaskDB {
     this.db = mockDB;
   }
 
-  create(data: ItemTaskFullDB[]) {
-    return this.db.item_tasks.bulkAdd(data);
+  create(data: CreateItemTaskData[]) {
+    return this.db.item_tasks.bulkAdd(data as any);
+  }
+
+  findById(id: number) {
+    return this.db.item_tasks.where('taskId').equals(id);
   }
 }
 
