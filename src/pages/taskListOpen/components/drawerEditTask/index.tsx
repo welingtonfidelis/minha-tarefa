@@ -33,7 +33,7 @@ export const DrawerEditTask = () => {
   const { t } = useTranslation();
   const { filters, isDrawerOpen, selectedTaskId, updateIsDrawerEditOpen } = taskListPageStore();
   const validateFormFields = formValidate();
-  const { mutate: createTask } = useCreateTask();
+  const { mutate: createTask, isLoading: createTaskLoading } = useCreateTask();
   const { refetch } = useGetTasks(filters);
   const toast = useToast();
 
@@ -90,7 +90,7 @@ export const DrawerEditTask = () => {
       onConfirm={() => formRef.current?.handleSubmit()}
       isOpen={isDrawerOpen}
       onClose={() => updateIsDrawerEditOpen(false)}
-      onConfirmLoading={false}
+      onConfirmLoading={createTaskLoading}
     >
       <Preloader isLoading={false}>
         <Formik

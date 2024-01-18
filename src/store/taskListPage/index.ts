@@ -4,7 +4,6 @@ import { State, Action } from "./types";
 const initialState = {
   filters: {
     page: 1,
-    filterByIdd: "",
     filterByName: "",
   },
   isDrawerOpen: false,
@@ -19,13 +18,7 @@ export const taskListPageStore = create<State & Action>((set) => ({
   },
 
   updateFilterByName: (data) => {
-    return set((state) => {
-      const filters = {
-        filters: { ...state.filters, filterByName: data },
-      };
-
-      return filters;
-    });
+    return set((state) => ({ filters: { ...state.filters, filterByName: data } }));
   },
 
   updateIsDrawerEditOpen: (data) => {

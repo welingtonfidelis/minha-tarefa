@@ -13,7 +13,7 @@ export const useCreateTask = () => {
 
 // ===== QUERIES ===== //
 export const useGetTasks = (params: FindTaskParam) => {
-  const getQueryKey = () => ["tasks"];
+  const getQueryKey = () => ["tasks", params];
 
   const { data, refetch, isLoading } = useQuery(getQueryKey(), () =>
     taskDB.find(params)

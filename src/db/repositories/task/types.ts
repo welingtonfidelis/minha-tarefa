@@ -7,6 +7,7 @@ export interface CreateTaskData extends Omit<Task, 'id' | 'items' | 'checked' | 
 
 export interface FindTaskParam {
     page: number;
-    id?: number;
-    closed?: boolean;
+    filterById?: number;
+    filterByClosed?: boolean;
+    filterByName?: string;
 }

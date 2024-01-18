@@ -1,10 +1,14 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 
-import { Content, MainContent } from "./styles";
+import {
+  Content,
+  IconCheckCircle,
+  IconClipboardList,
+  MainContent,
+} from "./styles";
 import { TaskListOpen } from "../taskListOpen";
 import { TaskListClosed } from "../taskListClosed";
-import { commonStore } from "../../store/commonStore";
-import { FaClipboardList, FaListUl } from "react-icons/fa";
+import { FaCheckCircle, FaClipboardList, FaListUl } from "react-icons/fa";
 
 export const MainPage = () => {
   // const { isMobileScreen } = commonStore();
@@ -25,10 +29,10 @@ export const MainPage = () => {
 
         <TabList>
           <Tab>
-            <FaClipboardList size={24} />
+            <IconClipboardList />
           </Tab>
           <Tab>
-            <FaListUl size={24} />
+            <IconCheckCircle />
           </Tab>
         </TabList>
       </Tabs>

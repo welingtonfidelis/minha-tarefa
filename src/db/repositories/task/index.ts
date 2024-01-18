@@ -3,7 +3,6 @@ import { DB, mockDB } from "../db";
 import { itemTaskDB } from "../itemTask";
 import { CreateItemTaskData } from "../itemTask/types";
 import { CreateTaskData, FindTaskParam } from "./types";
-const all = Dexie.Promise.all;
 
 class TaskDB {
   db: DB;
@@ -13,7 +12,6 @@ class TaskDB {
   }
 
   async create(data: CreateTaskData) {
-    console.log('data: ', data);
     const { items, ...rest } = data;
     const taskData = {
       ...rest,
@@ -36,27 +34,40 @@ class TaskDB {
   }
 
   async find(params: FindTaskParam) {
-    const { page = 1, id, closed = false } = params;
+    const { page = 1, filterByClosed = false, filterByName = "" } = params;
     const pageNumber = page - 1;
     const pageSize = 20;
+    const isChecked = filterByClosed ? 1 : 0;
 
     const tasks = await this.db.tasks
-      .where("checked")
-      .equals(closed ? 1 : 0)
+      .filter((task) => task.checked === isChecked)
+      .filter((task) => task.name.toLocaleLowerCase().includes(filterByName.toLocaleLowerCase()))
       .offset(pageNumber * pageSize)
       .limit(pageSize)
-      .toArray();
+      .reverse()
+      .sortBy("createdAt");
 
-    return all(
-      tasks.map(async (item) => {
-        const items = await itemTaskDB.findById(item.id);
+    const total = await this.db.tasks
+      .filter((task) => task.checked === isChecked)
+      .filter((task) => task.name.toLocaleLowerCase().includes(filterByName.toLocaleLowerCase()))
+      .count();
 
-        return {
-          ...item,
-          items,
-        };
-      })
-    );
+    // requests for include items on tasks
+    // const tasksWithItems = await all(
+    //   tasks.map(async (item) => {
+    //     const items = await itemTaskDB.findById(item.id);
+
+    //     return {
+    //       ...item,
+    //       items,
+    //     };
+    //   })
+    // );
+
+    return {
+      total,
+      tasks,
+    };
   }
 
   //   count() {

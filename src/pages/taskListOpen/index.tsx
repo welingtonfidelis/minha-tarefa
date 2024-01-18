@@ -1,21 +1,40 @@
 import { EmptyState } from "../../components/emptyState";
-import { Content } from "./styles";
+import { CardListContent, Content, MainContent } from "./styles";
 import { PageFilter } from "./components/pageFilter";
 import { DrawerEditTask } from "./components/drawerEditTask";
 import { useGetTasks } from "../../services/requests/tasks";
 import { taskListPageStore } from "../../store/taskListPage";
+import { Pagination } from "../../components/pagination";
+import { useTranslation } from "react-i18next";
+import { TaskListCard } from "../../components/taskListCard";
 
 export const TaskListOpen = () => {
-  const { filters } = taskListPageStore();
-  const { data: tasks } = useGetTasks(filters);
+  const { filters, updatePageNumber } = taskListPageStore();
+  const { data, isLoading } = useGetTasks({ ...filters });
+  const tasks = data?.tasks;
+  const total = data?.total;
+  const { t } = useTranslation();
 
   return (
     <Content>
       <PageFilter />
 
-      <EmptyState />
+      {total ? (
+        <MainContent>
+          <CardListContent>
+            <TaskListCard tasks={tasks || []} />
+          </CardListContent>
 
-      {tasks?.map((item) => item.name)}
+          <Pagination
+            currentPage={filters.page}
+            onPageChange={(page) => updatePageNumber(page)}
+            totalItems={data.total}
+          />
+        </MainContent>
+      ) : (
+        <EmptyState />
+      )}
+
       <DrawerEditTask />
     </Content>
   );

@@ -9,7 +9,7 @@ export class DB extends Dexie {
   constructor() {
     super("minha_tarefa_db");
     this.version(1).stores({
-      tasks: "++id, name, closedAt, checked",
+      tasks: "++id, name, closedAt, checked, [checked+name]",
       item_tasks: "++id, taskId",
     });
   }
