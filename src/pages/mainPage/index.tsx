@@ -5,10 +5,10 @@ import {
   IconCheckCircle,
   IconClipboardList,
   MainContent,
+  TabContent,
 } from "./styles";
 import { TaskListOpen } from "../taskListOpen";
 import { TaskListClosed } from "../taskListClosed";
-import { FaCheckCircle, FaClipboardList, FaListUl } from "react-icons/fa";
 
 export const MainPage = () => {
   // const { isMobileScreen } = commonStore();
@@ -27,14 +27,16 @@ export const MainPage = () => {
           </TabPanels>
         </MainContent>
 
-        <TabList>
-          <Tab>
-            <IconClipboardList />
-          </Tab>
-          <Tab>
-            <IconCheckCircle />
-          </Tab>
-        </TabList>
+        <TabContent>
+          <TabList>
+            <Tab>
+              <IconClipboardList />
+            </Tab>
+            <Tab>
+              <IconCheckCircle />
+            </Tab>
+          </TabList>
+        </TabContent>
       </Tabs>
     </Content>
   );

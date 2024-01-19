@@ -15,6 +15,22 @@ export const TaskListOpen = () => {
   const total = data?.total;
   const { t } = useTranslation();
 
+  const onClickTask = (id: number) => {
+    console.log("click", id);
+  };
+
+  const onEditTask = (id: number) => {
+    console.log("edit", id);
+  };
+
+  const onDeleteTask = (id: number) => {
+    console.log("delete", id);
+  };
+
+  const onRestartTask = (id: number) => {
+    console.log("restart", id);
+  };
+
   return (
     <Content>
       <PageFilter />
@@ -22,7 +38,13 @@ export const TaskListOpen = () => {
       {total ? (
         <MainContent>
           <CardListContent>
-            <TaskListCard tasks={tasks || []} />
+            <TaskListCard
+              tasks={tasks || []}
+              onClick={onClickTask}
+              onEdit={onEditTask}
+              onDelete={onDeleteTask}
+              onRestart={onRestartTask}
+            />
           </CardListContent>
 
           <Pagination
