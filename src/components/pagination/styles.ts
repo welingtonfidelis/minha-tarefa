@@ -8,6 +8,6 @@ export const Container = styled.div<{hasContent: boolean}>`
   box-shadow: 1px 0px 9px -4px rgba(0, 0, 0, 0.35);
 
   & .rpb-item--active {
-    background-color: ${(props) => props.theme.colors.primary};
+    background-color: var(--primary);
   }
 `;

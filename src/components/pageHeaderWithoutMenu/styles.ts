@@ -14,12 +14,12 @@ export const IconBackContainer = styled.div`
   margin-left: .5rem;
 
   & svg {
-    color: ${(props) => props.theme.colors.primary};
+    color: var(--primary);
   }
 `;
 
 export const TitleContainer = styled.div`
-  color: ${(props) => props.theme.colors.primary};
+  color: var(--primary);
   display: flex;
   justify-content: center;
   align-items: center;

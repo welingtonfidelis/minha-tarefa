@@ -21,3 +21,7 @@ export const IconClipboardList = styled(FaClipboardList)`
 export const IconCheckCircle = styled(FaCheckCircle)`
   font-size: 24px;
 `;
+
+export const TabContent = styled.div`
+  background-color: var(--background2);
+`
