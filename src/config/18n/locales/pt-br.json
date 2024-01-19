@@ -2,6 +2,10 @@
   "components": {
     "empty_state": {
       "message": "Sem dados para mostrar aqui."
+    },
+    "task_list": {
+      "alert_description_delete_task": "Quer realmente excluir esta tarefa?",
+      "alert_description_restart_task": "Quer realmente reiniciar esta tarefa?"
     }
   },
   "pages": {
@@ -40,6 +44,7 @@
     "button_ok": "Ok",
     "button_send": "Enviar",
     "button_delete": "Deletar",
-    "required_input_value": "Campo obrigatório"
+    "required_input_value": "Campo obrigatório",
+    "alert_title": "Atenção!"
   }
 }

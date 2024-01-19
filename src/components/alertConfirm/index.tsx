@@ -1,62 +1,72 @@
 import {
   AlertDialog,
   AlertDialogBody,
+  AlertDialogCloseButton,
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { PropsWithChildren, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Props } from "./types";
+import { ChildrenContainer } from "./styles";
 
-export const AlertConfirm = (props: Props) => {
+export const AlertConfirm = (props: PropsWithChildren<Props>) => {
   const {
     title,
     description,
-    isOpen,
     isLoading,
     onConfirmText,
     onCancelText,
     onConfirm,
-    onClose,
+    children,
   } = props;
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const { t } = useTranslation();
 
   return (
-    <AlertDialog
-      isOpen={isOpen}
-      leastDestructiveRef={cancelRef}
-      onClose={onClose}
-    >
-      <AlertDialogOverlay>
-        <AlertDialogContent alignSelf={"center"}>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            {title}
-          </AlertDialogHeader>
+    <>
+      <ChildrenContainer onClick={onOpen}>{children}</ChildrenContainer>
 
-          <AlertDialogBody>{description}</AlertDialogBody>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isCentered
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent alignSelf={"center"}>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              {title ?? t("generic.alert_title")}
+            </AlertDialogHeader>
 
-          <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
-              {onCancelText || t("generic.button_no")}
-            </Button>
-            {onConfirm && (
-              <Button
-                colorScheme="red"
-                onClick={onConfirm}
-                ml={3}
-                isLoading={isLoading}
-              >
-                {onConfirmText || t("generic.button_yes")}
+            <AlertDialogCloseButton />
+
+            <AlertDialogBody>{description}</AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                {onCancelText || t("generic.button_no")}
               </Button>
-            )}
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialog>
+              {onConfirm && (
+                <Button
+                  colorScheme="red"
+                  onClick={() => onConfirm().then(() => onClose())}
+                  ml={3}
+                  isLoading={isLoading}
+                >
+                  {onConfirmText || t("generic.button_yes")}
+                </Button>
+              )}
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
   );
 };

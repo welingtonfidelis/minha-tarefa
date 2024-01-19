@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  Grid,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardHeader, Grid, Heading, Text } from "@chakra-ui/react";
 import { Props } from "./types";
 import {
   ActionContainer,
@@ -15,6 +9,8 @@ import {
   ResetIcon,
 } from "./styles";
 import { IconButton } from "../iconButton";
+import { AlertConfirm } from "../alertConfirm";
+import { t } from "i18next";
 
 export const TaskListCard = (props: Props) => {
   const { tasks, onClick, onDelete, onEdit, onRestart } = props;
@@ -36,18 +32,32 @@ export const TaskListCard = (props: Props) => {
               </DescriptionContainer>
               <ActionContainer>
                 {onDelete && (
-                  <IconButton
-                    icon={<DeleteIcon />}
-                    onClick={() => onDelete(item.id)}
-                    title=""
-                  />
+                  <AlertConfirm
+                    description={t(
+                      "components.task_list.alert_description_delete_task"
+                    )}
+                    onConfirm={() => onDelete(item.id)}
+                  >
+                    <IconButton
+                      icon={<DeleteIcon />}
+                      onClick={() => {}}
+                      title=""
+                    />
+                  </AlertConfirm>
                 )}
                 {onRestart && (
-                  <IconButton
-                    icon={<ResetIcon />}
-                    onClick={() => onRestart(item.id)}
-                    title=""
-                  />
+                  <AlertConfirm
+                    description={t(
+                      "components.task_list.alert_description_reset_task"
+                    )}
+                    onConfirm={() => onRestart(item.id)}
+                  >
+                    <IconButton
+                      icon={<ResetIcon />}
+                      onClick={() => {}}
+                      title=""
+                    />
+                  </AlertConfirm>
                 )}
                 {onEdit && (
                   <IconButton

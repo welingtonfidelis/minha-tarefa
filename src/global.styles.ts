@@ -32,6 +32,10 @@ export const GlobalStyles = createGlobalStyle`
     --radius-1: .25rem;
   }
 
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+
   body {
     background-color: var(--background) !important;
     height: 100vh;

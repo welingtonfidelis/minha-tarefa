@@ -44,7 +44,7 @@ export const DrawerEditTask = () => {
   const { mutate: createTask, isLoading: createTaskLoading } = useCreateTask();
   const { mutate: updateTask, isLoading: updateTaskLoading } = useUpdateTask();
   const { data, refetch: refetchGetTaskById, isLoading: getTaskLoading } = useGetTaskById(selectedTaskId);
-  const { refetch } = useGetTasks(filters);
+  const { refetch: refetchGetTasks } = useGetTasks(filters);
   const toast = useToast();
   const formRef = useRef<FormikProps<FormProps>>(null);
 
@@ -71,7 +71,7 @@ export const DrawerEditTask = () => {
             ),
           });
 
-          refetch();
+          refetchGetTasks();
           refetchGetTaskById();
           updateIsDrawerEditOpen(false);
         },
@@ -96,7 +96,7 @@ export const DrawerEditTask = () => {
           ),
         });
 
-        refetch();
+        refetchGetTasks();
         updateIsDrawerEditOpen(false);
       },
       onError(error) {

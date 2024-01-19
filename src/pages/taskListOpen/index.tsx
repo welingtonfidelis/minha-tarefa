@@ -7,9 +7,15 @@ import { taskListPageStore } from "../../store/taskListPage";
 import { Pagination } from "../../components/pagination";
 import { useTranslation } from "react-i18next";
 import { TaskListCard } from "../../components/taskListCard";
+import { Preloader } from "../../components/preloader";
 
 export const TaskListOpen = () => {
-  const { filters, updatePageNumber, updateSelectedTaskId, updateIsDrawerEditOpen } = taskListPageStore();
+  const {
+    filters,
+    updatePageNumber,
+    updateSelectedTaskId,
+    updateIsDrawerEditOpen,
+  } = taskListPageStore();
   const { data, isLoading } = useGetTasks({ ...filters });
   const tasks = data?.tasks;
   const total = data?.total;
@@ -24,7 +30,7 @@ export const TaskListOpen = () => {
     updateIsDrawerEditOpen(true);
   };
 
-  const onDeleteTask = (id: number) => {
+  const onDeleteTask = async (id: number) => {
     console.log("delete", id);
   };
 
@@ -34,20 +40,22 @@ export const TaskListOpen = () => {
 
       {total ? (
         <MainContent>
-          <CardListContent>
-            <TaskListCard
-              tasks={tasks || []}
-              onClick={onClickTask}
-              onEdit={onEditTask}
-              onDelete={onDeleteTask}
-            />
-          </CardListContent>
+          <Preloader isLoading={isLoading}>
+            <CardListContent>
+              <TaskListCard
+                tasks={tasks || []}
+                onClick={onClickTask}
+                onEdit={onEditTask}
+                onDelete={onDeleteTask}
+              />
+            </CardListContent>
 
-          <Pagination
-            currentPage={filters.page}
-            onPageChange={(page) => updatePageNumber(page)}
-            totalItems={data.total}
-          />
+            <Pagination
+              currentPage={filters.page}
+              onPageChange={(page) => updatePageNumber(page)}
+              totalItems={data.total}
+            />
+          </Preloader>
         </MainContent>
       ) : (
         <EmptyState />

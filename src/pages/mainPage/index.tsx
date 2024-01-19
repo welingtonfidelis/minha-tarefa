@@ -15,10 +15,10 @@ export const MainPage = () => {
 
   return (
     <Content>
-      <Tabs isFitted variant="enclosed" height=" auto">
+      <Tabs isFitted variant="enclosed" height="auto">
         <MainContent>
           <TabPanels>
-            <TabPanel>
+            <TabPanel paddingBottom={0}>
               <TaskListOpen />
             </TabPanel>
             <TabPanel>

@@ -21,8 +21,8 @@ export const ActionContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 5px;
-    padding-top: 8px;
-    border-top: .5px solid var(--separator);
+  padding-top: 8px;
+  border-top: 0.5px solid var(--separator);
 `;
 
 export const EditIcon = styled(FaPencilAlt)`
