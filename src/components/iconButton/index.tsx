@@ -1,18 +1,17 @@
-import { Container } from "./styles";
+import { Button } from "@chakra-ui/react";
 
 interface Props {
-    icon: React.ReactElement;
-    onClick: () => void;
-    title: string;
+  icon: React.ReactElement;
+  onClick: () => void;
+  title: string;
 }
 
 export const IconButton = (props: Props) => {
-    const { icon, title, onClick } = props;
+  const { icon, title, onClick } = props;
 
-    return (
-        <Container onClick={onClick} title={title}>
-            {icon}
-        </Container>
-    )
-
-}
+  return (
+    <Button onClick={onClick} title={title} variant="link">
+      {icon}
+    </Button>
+  );
+};
