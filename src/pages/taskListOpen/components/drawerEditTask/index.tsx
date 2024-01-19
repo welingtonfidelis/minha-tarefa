@@ -26,26 +26,35 @@ import { IconMinus, ItemContent, ItemInputContent } from "./styles";
 import { IconButton } from "../../../../components/iconButton";
 import {
   useCreateTask,
+  useGetTaskById,
   useGetTasks,
+  useUpdateTask,
 } from "../../../../services/requests/tasks";
 
 export const DrawerEditTask = () => {
   const { t } = useTranslation();
-  const { filters, isDrawerOpen, selectedTaskId, updateIsDrawerEditOpen } = taskListPageStore();
+  const {
+    filters,
+    isDrawerOpen,
+    selectedTaskId,
+    updateIsDrawerEditOpen,
+    updateSelectedTaskId,
+  } = taskListPageStore();
   const validateFormFields = formValidate();
   const { mutate: createTask, isLoading: createTaskLoading } = useCreateTask();
+  const { mutate: updateTask, isLoading: updateTaskLoading } = useUpdateTask();
+  const { data, refetch: refetchGetTaskById, isLoading: getTaskLoading } = useGetTaskById(selectedTaskId);
   const { refetch } = useGetTasks(filters);
   const toast = useToast();
-
   const formRef = useRef<FormikProps<FormProps>>(null);
 
   const initialFormValues = useMemo(
     () => ({
-      name: "",
-      description: "",
-      items: ["itemA", "itemB"],
+      name: data?.name || "",
+      description: data?.description || "",
+      items: data?.items.map((item) => item.name) || [],
     }),
-    [selectedTaskId]
+    [data]
   );
 
   const handleSubmit = async (
@@ -53,7 +62,28 @@ export const DrawerEditTask = () => {
     actions: FormikHelpers<FormProps>
   ) => {
     if (selectedTaskId) {
-      console.log("update", values);
+      const updateData = { id: selectedTaskId, ...values };
+      updateTask(updateData, {
+        onSuccess(data) {
+          toast({
+            title: t(
+              "pages.task_list_open.components.drawer_task.success_request_edit_message"
+            ),
+          });
+
+          refetch();
+          refetchGetTaskById();
+          updateIsDrawerEditOpen(false);
+        },
+        onError(error) {
+          toast({
+            title: t(
+              "pages.task_list_open.components.drawer_task.error_request_edit_message"
+            ),
+            status: "error",
+          });
+        },
+      });
 
       return;
     }
@@ -80,6 +110,12 @@ export const DrawerEditTask = () => {
     });
   };
 
+  const handleClose = () => {
+    if (selectedTaskId) updateSelectedTaskId(0);
+
+    updateIsDrawerEditOpen(false);
+  };
+
   return (
     <Drawer
       title={
@@ -89,10 +125,10 @@ export const DrawerEditTask = () => {
       }
       onConfirm={() => formRef.current?.handleSubmit()}
       isOpen={isDrawerOpen}
-      onClose={() => updateIsDrawerEditOpen(false)}
-      onConfirmLoading={createTaskLoading}
+      onClose={handleClose}
+      onConfirmLoading={createTaskLoading ?? updateTaskLoading}
     >
-      <Preloader isLoading={false}>
+      <Preloader isLoading={getTaskLoading}>
         <Formik
           innerRef={formRef}
           initialValues={initialFormValues}
@@ -132,6 +168,7 @@ export const DrawerEditTask = () => {
                     </FormLabel>
                     <Textarea
                       {...field}
+                      rows={8}
                       resize="none"
                       placeholder={t(
                         "pages.task_list_open.components.drawer_task.input_description"
@@ -142,7 +179,7 @@ export const DrawerEditTask = () => {
                 )}
               </Field>
 
-              <FormLabel>
+              <FormLabel mt="2">
                 {t("pages.task_list_open.components.drawer_task.input_items")}
               </FormLabel>
               <ItemInputContent>

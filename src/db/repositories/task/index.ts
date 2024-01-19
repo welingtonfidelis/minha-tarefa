@@ -1,8 +1,7 @@
-import Dexie from "dexie";
 import { DB, mockDB } from "../db";
 import { itemTaskDB } from "../itemTask";
 import { CreateItemTaskData } from "../itemTask/types";
-import { CreateTaskData, FindTaskParam } from "./types";
+import { CreateTaskData, FindTaskParam, UpdateTaskData } from "./types";
 
 class TaskDB {
   db: DB;
@@ -41,7 +40,9 @@ class TaskDB {
 
     const tasks = await this.db.tasks
       .filter((task) => task.checked === isChecked)
-      .filter((task) => task.name.toLocaleLowerCase().includes(filterByName.toLocaleLowerCase()))
+      .filter((task) =>
+        task.name.toLocaleLowerCase().includes(filterByName.toLocaleLowerCase())
+      )
       .offset(pageNumber * pageSize)
       .limit(pageSize)
       .reverse()
@@ -49,20 +50,10 @@ class TaskDB {
 
     const total = await this.db.tasks
       .filter((task) => task.checked === isChecked)
-      .filter((task) => task.name.toLocaleLowerCase().includes(filterByName.toLocaleLowerCase()))
+      .filter((task) =>
+        task.name.toLocaleLowerCase().includes(filterByName.toLocaleLowerCase())
+      )
       .count();
-
-    // requests for include items on tasks
-    // const tasksWithItems = await all(
-    //   tasks.map(async (item) => {
-    //     const items = await itemTaskDB.findById(item.id);
-
-    //     return {
-    //       ...item,
-    //       items,
-    //     };
-    //   })
-    // );
 
     return {
       total,
@@ -70,46 +61,34 @@ class TaskDB {
     };
   }
 
-  //   count() {
-  //     return this.db.users.count();
-  //   }
+  async findById(id: number) {
+    const [task] = await this.db.tasks.where("id").equals(id).toArray();
 
-  //   find(page: number, loggedUserId: number) {
-  //     const pageNumber = page -1;
-  //     const pageSize = 20;
+    const items = await itemTaskDB.findByTaskId(id);
 
-  //     return this.db.users
-  //       .where("id")
-  //       .notEqual(loggedUserId)
-  //       .offset(pageNumber * pageSize)
-  //       .limit(pageSize)
-  //       .toArray();
-  //   }
+    return { ...task, items };
+  }
 
-  //   findByUserNameOrEmail(username: string) {
-  //     return this.db.users
-  //       .where("username")
-  //       .equals(username)
-  //       .or("email")
-  //       .equals(username)
-  //       .toArray();
-  //   }
+  async update(data: UpdateTaskData) {
+    const { id, items, ...rest } = data;
+    const taskUpdated = await this.db.tasks.update(id, rest);
 
-  //   findById(id: number) {
-  //     return this.db.users.where("id").equals(id).toArray();
-  //   }
+    if (taskUpdated) {
+      await itemTaskDB.deleteByTaskId(id);
 
-  //   create(data: Omit<UserFullDB, 'id'>) {
-  //     return this.db.users.add(data);
-  //   }
+      if (items && items.length) {
+        const newItems = items.map((item) => ({
+          name: item,
+          taskId: id,
+          checked: 0,
+        })) as CreateItemTaskData[];
 
-  //   update(id: number, data: Partial<UserFullDB>) {
-  //     return this.db.users.update(id, data);
-  //   }
+        await itemTaskDB.create(newItems);
+      }
+    }
 
-  //   delete(id: number) {
-  //     return this.db.users.delete(id);
-  //   }
+    return;
+  }
 }
 
 export const taskDB = new TaskDB();

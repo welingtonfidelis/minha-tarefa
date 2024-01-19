@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { TaskListCard } from "../../components/taskListCard";
 
 export const TaskListOpen = () => {
-  const { filters, updatePageNumber } = taskListPageStore();
+  const { filters, updatePageNumber, updateSelectedTaskId, updateIsDrawerEditOpen } = taskListPageStore();
   const { data, isLoading } = useGetTasks({ ...filters });
   const tasks = data?.tasks;
   const total = data?.total;
@@ -20,15 +20,12 @@ export const TaskListOpen = () => {
   };
 
   const onEditTask = (id: number) => {
-    console.log("edit", id);
+    updateSelectedTaskId(id);
+    updateIsDrawerEditOpen(true);
   };
 
   const onDeleteTask = (id: number) => {
     console.log("delete", id);
-  };
-
-  const onRestartTask = (id: number) => {
-    console.log("restart", id);
   };
 
   return (
@@ -43,7 +40,6 @@ export const TaskListOpen = () => {
               onClick={onClickTask}
               onEdit={onEditTask}
               onDelete={onDeleteTask}
-              onRestart={onRestartTask}
             />
           </CardListContent>
 

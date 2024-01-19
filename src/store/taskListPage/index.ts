@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { State, Action } from "./types";
 
-const initialState = {
+const initialState: State = {
   filters: {
     page: 1,
     filterByName: "",
   },
   isDrawerOpen: false,
-  selectedTaskId: null,
+  selectedTaskId: 0
 };
 
 export const taskListPageStore = create<State & Action>((set) => ({

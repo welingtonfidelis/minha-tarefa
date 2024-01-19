@@ -12,8 +12,12 @@ class ItemTaskDB {
     return this.db.item_tasks.bulkAdd(data as any);
   }
 
-  findById(id: number) {
-    return this.db.item_tasks.where('taskId').equals(id);
+  findByTaskId(id: number) {
+    return this.db.item_tasks.where("taskId").equals(id).toArray();
+  }
+
+  deleteByTaskId(id: number) {
+    return this.db.item_tasks.where("taskId").equals(id).delete();
   }
 }
 

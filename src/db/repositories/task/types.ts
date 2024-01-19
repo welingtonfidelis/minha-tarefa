@@ -11,3 +11,7 @@ export interface FindTaskParam {
     filterByClosed?: boolean;
     filterByName?: string;
 }
+
+export interface UpdateTaskData extends Omit<Task, 'items' | 'checked' | 'createdAt'> {
+    items?: string[];
+}

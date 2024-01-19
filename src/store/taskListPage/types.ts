@@ -9,12 +9,12 @@ export type State = {
     filterByName: string;
   };
   isDrawerOpen: boolean;
-  selectedTaskId: number | null;
+  selectedTaskId: number;
 };
 
 export type Action = {
   updatePageNumber: (data: number) => void;
   updateFilterByName: (data: string) => void;
   updateIsDrawerEditOpen: (data: boolean) => void;
-  updateSelectedTaskId: (data: number | null) => void;
+  updateSelectedTaskId: (data: number) => void;
 };
