@@ -12,7 +12,9 @@
       "button_done_task": "Finalizar Tarefa",
       "success_request_update_message": "Sucesso! Tarefa atualizada.",
       "error_request_update_message": "Erro! Houve um erro ao tentar atualizar a tarefa.",
-      "error_request_update_item_task": "Erro! Houve um erro ao tentar atualizar o item desta tarefa."
+      "error_request_update_item_task": "Erro! Houve um erro ao tentar atualizar o item desta tarefa.",
+      "success_request_reset_message": "Sucesso! Tarefa reiniciada.",
+      "error_request_reset_message": "Erro! Houve um erro ao tentar reiniciar a tarefa."
     }
   },
   "pages": {
@@ -21,8 +23,8 @@
       "description_message": "Página não encontrada"
     },
     "task_list_open": {
-      "page_title": "Lista de tarefas",
-      "input_search_name":  "Nome",
+      "page_title": "Lista de tarefas abertas",
+      "input_search_name": "Nome",
       "button_new_task": "Nova Tarefa",
       "components": {
         "drawer_task": {
@@ -35,10 +37,16 @@
           "button_add_item": "Adicionar item",
           "success_request_new_message": "Sucesso! Tarefa criada.",
           "error_request_new_message": "Erro! Houve um erro ao tentar criar a tarefa.",
+          "success_request_delete_message": "Sucesso! Tarefa excluida.",
+          "error_request_delete_message": "Erro! Houve um erro ao tentar excluir a tarefa.",
           "success_request_edit_message": "Sucesso! Tarefa alterada.",
           "error_request_edit_message": "Erro! Houve um erro ao tentar alterar a tarefa."
         }
       }
+    },
+    "task_list_close": {
+      "page_title": "Lista de tarefas encerradas",
+      "input_search_name": "Nome"
     }
   },
   "generic": {

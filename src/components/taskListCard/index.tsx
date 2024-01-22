@@ -4,7 +4,6 @@ import {
   Grid,
   Heading,
   Text,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { Props } from "./types";
@@ -18,11 +17,15 @@ import {
 } from "./styles";
 import { IconButton } from "../iconButton";
 import { AlertConfirm } from "../alertConfirm";
-import { taskListPageStore } from "../../store/taskListPage";
-import { useDeleteTask, useGetTasks } from "../../services/requests/tasks";
+import { taskListOpenPageStore } from "../../store/taskListOpenPage";
+import {
+  useDeleteTask,
+  useGetTasks,
+  useUpdateTask,
+} from "../../services/requests/tasks";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 import { DrawerDetailTask } from "./components/drawerDetailTask";
+import { taskListClosedPageStore } from "../../store/taskListClosedPage";
 
 export const TaskListCard = (props: Props) => {
   const { tasks, isTaskOpenListPage } = props;
@@ -32,18 +35,42 @@ export const TaskListCard = (props: Props) => {
     updateSelectedTaskId,
     updateIsDrawerEditOpen,
     updateIsDrawerDetailOpen,
-    filters,
-  } = taskListPageStore();
-  const { refetch: refetchGetOpenedTasks } = useGetTasks(filters);
+    filters: filtersOpenList,
+  } = taskListOpenPageStore();
+  const { filters: filtersCLoseList } = taskListClosedPageStore();
+  const { refetch: refetchGetOpenedTasks } = useGetTasks(filtersOpenList);
+  const { refetch: refetchGetClosedTasks } = useGetTasks(filtersCLoseList);
   const { mutate: deleteTask, isLoading: deleteTaskLoading } = useDeleteTask();
+  const { mutate: updateTask } = useUpdateTask();
 
   const onClickTask = (id: number) => {
     updateSelectedTaskId(id);
     updateIsDrawerDetailOpen(true);
   };
 
-  const onRestartTask = (id: number) => {
-    console.log("restart", id);
+  const onResetTask = (id: number) => {
+    const updateTaskData = { id, checked: 0 } as any;
+
+    updateTask(updateTaskData, {
+      onSuccess(data) {
+        toast({
+          title: t(
+            "components.drawer_detail_task.success_request_reset_message"
+          ),
+        });
+
+        refetchGetOpenedTasks();
+        refetchGetClosedTasks();
+      },
+      onError(error) {
+        toast({
+          title: t(
+            "components.drawer_detail_task.error_request_reset_message"
+          ),
+          status: "error",
+        });
+      },
+    });
   };
 
   const onEditTask = (id: number) => {
@@ -56,17 +83,21 @@ export const TaskListCard = (props: Props) => {
       onSuccess(data) {
         toast({
           title: t(
-            "pages.task_list_open.components.drawer_task.success_request_edit_message"
+            "pages.task_list_open.components.drawer_task.success_request_delete_message"
           ),
         });
 
-        refetchGetOpenedTasks();
-        updateIsDrawerEditOpen(false);
+        if (isTaskOpenListPage) {
+          refetchGetOpenedTasks();
+          return;
+        }
+
+        refetchGetClosedTasks();
       },
       onError(error) {
         toast({
           title: t(
-            "pages.task_list_open.components.drawer_task.error_request_edit_message"
+            "pages.task_list_open.components.drawer_task.error_request_delete_message"
           ),
           status: "error",
         });
@@ -95,6 +126,7 @@ export const TaskListCard = (props: Props) => {
                     description={t(
                       "components.task_list.alert_description_delete_task"
                     )}
+                    isLoading={deleteTaskLoading}
                     onConfirm={async () => onDeleteTask(item.id)}
                   >
                     <IconButton
@@ -106,9 +138,9 @@ export const TaskListCard = (props: Props) => {
                   {!isTaskOpenListPage && (
                     <AlertConfirm
                       description={t(
-                        "components.task_list.alert_description_reset_task"
+                        "components.task_list.alert_description_restart_task"
                       )}
-                      onConfirm={async () => onRestartTask(item.id)}
+                      onConfirm={async () => onResetTask(item.id)}
                     >
                       <IconButton
                         icon={<ResetIcon />}

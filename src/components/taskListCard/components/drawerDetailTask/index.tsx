@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Drawer } from "../../../drawer";
-import { taskListPageStore } from "../../../../store/taskListPage";
+import { taskListOpenPageStore } from "../../../../store/taskListOpenPage";
 import { Preloader } from "../../../preloader";
 import {
   Accordion,
@@ -22,18 +22,20 @@ import {
 import { Props } from "./types";
 import { ButtonContent, Content, ItemsContent, SectionContent } from "./styles";
 import { useQueryClient } from "react-query";
+import { taskListClosedPageStore } from "../../../../store/taskListClosedPage";
 
 export const DrawerDetailTask = (props: Props) => {
   const { t } = useTranslation();
   const toast = useToast();
   const queryClient = useQueryClient();
   const {
-    filters,
+    filters: filtersOpenList,
     isDrawerDetailOpen,
     selectedTaskId,
     updateIsDrawerDetailOpen,
     updateSelectedTaskId,
-  } = taskListPageStore();
+  } = taskListOpenPageStore();
+  const { filters: filtersCLoseList} = taskListClosedPageStore();
   const { mutate: updateItemTask } = useUpdateItemTask();
   const { mutate: updateTask, isLoading: isUpdateTaskLoading } =
     useUpdateTask();
@@ -42,7 +44,8 @@ export const DrawerDetailTask = (props: Props) => {
     isLoading: getTaskLoading,
     getQueryKey,
   } = useGetTaskById(selectedTaskId);
-  const { refetch: refetchGetTasks } = useGetTasks(filters);
+  const { refetch: refetchGetOpenTasks } = useGetTasks(filtersOpenList);
+  const { refetch: refetchGetClosedTasks } = useGetTasks(filtersCLoseList);
 
   const handleClose = () => {
     updateSelectedTaskId(0);
@@ -90,7 +93,8 @@ export const DrawerDetailTask = (props: Props) => {
           ),
         });
 
-        refetchGetTasks();
+        refetchGetOpenTasks();
+        refetchGetClosedTasks();
         updateIsDrawerDetailOpen(false);
       },
       onError(error) {

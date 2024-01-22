@@ -5,13 +5,14 @@ const initialState: State = {
   filters: {
     page: 1,
     filterByName: "",
+    filterByClosed: false,
   },
   isDrawerEditOpen: false,
   isDrawerDetailOpen: false,
   selectedTaskId: 0
 };
 
-export const taskListPageStore = create<State & Action>((set) => ({
+export const taskListOpenPageStore = create<State & Action>((set) => ({
   ...initialState,
 
   updatePageNumber: (data) => {

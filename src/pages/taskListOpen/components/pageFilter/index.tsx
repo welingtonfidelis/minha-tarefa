@@ -1,13 +1,13 @@
 import { DebounceInput } from "react-debounce-input";
 import { Button, Input } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { taskListPageStore } from "../../../../store/taskListPage";
+import { taskListOpenPageStore } from "../../../../store/taskListOpenPage";
 import { Content } from "./styles";
 
 export const PageFilter = () => {
   const { t } = useTranslation();
 
-  const { filters, updateFilterByName, updateIsDrawerEditOpen } = taskListPageStore();
+  const { filters, updateFilterByName, updateIsDrawerEditOpen } = taskListOpenPageStore();
 
   return (
     <Content>

@@ -3,7 +3,7 @@ import { CardListContent, Content, MainContent } from "./styles";
 import { PageFilter } from "./components/pageFilter";
 import { DrawerEditTask } from "./components/drawerEditTask";
 import { useGetTasks } from "../../services/requests/tasks";
-import { taskListPageStore } from "../../store/taskListPage";
+import { taskListOpenPageStore } from "../../store/taskListOpenPage";
 import { Pagination } from "../../components/pagination";
 import { TaskListCard } from "../../components/taskListCard";
 import { Preloader } from "../../components/preloader";
@@ -12,7 +12,7 @@ export const TaskListOpen = () => {
   const {
     filters,
     updatePageNumber,
-  } = taskListPageStore();
+  } = taskListOpenPageStore();
   const { data, isLoading } = useGetTasks({ ...filters });
 
   return (

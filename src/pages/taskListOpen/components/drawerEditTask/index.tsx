@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Drawer } from "../../../../components/drawer";
-import { taskListPageStore } from "../../../../store/taskListPage";
+import { taskListOpenPageStore } from "../../../../store/taskListOpenPage";
 import { Preloader } from "../../../../components/preloader";
 import { useMemo, useRef } from "react";
 import {
@@ -39,7 +39,7 @@ export const DrawerEditTask = () => {
     selectedTaskId,
     updateIsDrawerEditOpen,
     updateSelectedTaskId,
-  } = taskListPageStore();
+  } = taskListOpenPageStore();
   const validateFormFields = formValidate();
   const { mutate: createTask, isLoading: createTaskLoading } = useCreateTask();
   const { mutate: updateTask, isLoading: updateTaskLoading } = useUpdateTask();
