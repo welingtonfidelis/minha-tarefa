@@ -6,6 +6,6 @@ export interface Props {
   onConfirmLoading?: boolean;
   showActionButtons?: boolean;
   extraActionButton?: JSX.Element;
-  onConfirm: () => void;
+  onConfirm?: () => void;
   onClose: () => void;
 }
