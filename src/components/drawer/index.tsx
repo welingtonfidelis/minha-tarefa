@@ -32,27 +32,29 @@ export const Drawer = (props: PropsWithChildren<Props>) => {
     <DrawerChakra onClose={onClose} isOpen={isOpen} size="lg">
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader padding={'1rem'}>{title}</DrawerHeader>
+        <DrawerHeader padding={"1rem"}>{title}</DrawerHeader>
         <DrawerCloseButton />
-        <DrawerBody padding={'1rem'}>{children}</DrawerBody>
+        <DrawerBody padding={"1rem"}>{children}</DrawerBody>
         {showActionButtons && (
           <DrawerFooter>
             {extraActionButton}
             <Button
               onClick={onClose}
               colorScheme="gray"
-              marginEnd={"2"}
               type="submit"
             >
               {onCloseButtonText || t("generic.button_cancel")}
             </Button>
-            <Button
-              onClick={onConfirm}
-              colorScheme="blue"
-              isLoading={onConfirmLoading}
-            >
-              {onConfirmButtonText || t("generic.button_save")}
-            </Button>
+            {onConfirm && (
+              <Button
+                onClick={onConfirm}
+                colorScheme="blue"
+                marginLeft={2}
+                isLoading={onConfirmLoading}
+              >
+                {onConfirmButtonText || t("generic.button_save")}
+              </Button>
+            )}
           </DrawerFooter>
         )}
       </DrawerContent>
