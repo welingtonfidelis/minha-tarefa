@@ -1,5 +1,5 @@
 import { DB, mockDB } from "../db";
-import { CreateItemTaskData } from "./types";
+import { CreateItemTaskData, UpdateItemTaskData } from "./types";
 
 class ItemTaskDB {
   db: DB;
@@ -14,6 +14,12 @@ class ItemTaskDB {
 
   findByTaskId(id: number) {
     return this.db.item_tasks.where("taskId").equals(id).toArray();
+  }
+
+  update(data: UpdateItemTaskData) {
+    const { id, ...rest } = data;
+
+    return this.db.item_tasks.update(id, rest);
   }
 
   deleteByTaskId(id: number) {

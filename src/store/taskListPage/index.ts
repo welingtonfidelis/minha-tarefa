@@ -6,7 +6,8 @@ const initialState: State = {
     page: 1,
     filterByName: "",
   },
-  isDrawerOpen: false,
+  isDrawerEditOpen: false,
+  isDrawerDetailOpen: false,
   selectedTaskId: 0
 };
 
@@ -22,7 +23,11 @@ export const taskListPageStore = create<State & Action>((set) => ({
   },
 
   updateIsDrawerEditOpen: (data) => {
-    return set((state) => ({ ...state, isDrawerOpen: data }));
+    return set((state) => ({ ...state, isDrawerEditOpen: data }));
+  },
+
+  updateIsDrawerDetailOpen: (data) => {
+    return set((state) => ({ ...state, isDrawerDetailOpen: data }));
   },
 
   updateSelectedTaskId: (data) => {

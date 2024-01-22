@@ -35,7 +35,7 @@ export const DrawerEditTask = () => {
   const { t } = useTranslation();
   const {
     filters,
-    isDrawerOpen,
+    isDrawerEditOpen,
     selectedTaskId,
     updateIsDrawerEditOpen,
     updateSelectedTaskId,
@@ -124,7 +124,7 @@ export const DrawerEditTask = () => {
           : t("pages.task_list_open.components.drawer_task.new_task_title")
       }
       onConfirm={() => formRef.current?.handleSubmit()}
-      isOpen={isDrawerOpen}
+      isOpen={isDrawerEditOpen}
       onClose={handleClose}
       onConfirmLoading={createTaskLoading ?? updateTaskLoading}
     >

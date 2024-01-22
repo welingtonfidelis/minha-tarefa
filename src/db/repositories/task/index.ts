@@ -91,8 +91,7 @@ class TaskDB {
   }
 
   async delete(id: number) {
-    const taskDelete = await this.db.tasks.delete(id);
-    console.log("taskDelete: ", taskDelete);
+    await this.db.tasks.delete(id);
 
     await itemTaskDB.deleteByTaskId(id);
 

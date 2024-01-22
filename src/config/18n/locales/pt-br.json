@@ -6,6 +6,13 @@
     "task_list": {
       "alert_description_delete_task": "Quer realmente excluir esta tarefa?",
       "alert_description_restart_task": "Quer realmente reiniciar esta tarefa?"
+    },
+    "drawer_detail_task": {
+      "input_description": "Descrição",
+      "button_done_task": "Finalizar Tarefa",
+      "success_request_update_message": "Sucesso! Tarefa atualizada.",
+      "error_request_update_message": "Erro! Houve um erro ao tentar atualizar a tarefa.",
+      "error_request_update_item_task": "Erro! Houve um erro ao tentar atualizar o item desta tarefa."
     }
   },
   "pages": {

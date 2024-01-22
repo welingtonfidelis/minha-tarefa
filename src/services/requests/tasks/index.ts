@@ -5,6 +5,8 @@ import {
   FindTaskParam,
   UpdateTaskData,
 } from "../../../db/repositories/task/types";
+import { itemTaskDB } from "../../../db/repositories/itemTask";
+import { UpdateItemTaskData } from "../../../db/repositories/itemTask/types";
 
 // ===== MUTATES ===== //
 export const useCreateTask = () => {
@@ -18,6 +20,14 @@ export const useCreateTask = () => {
 export const useUpdateTask = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: (data: UpdateTaskData) => taskDB.update(data),
+  });
+
+  return { mutate, isLoading };
+};
+
+export const useUpdateItemTask = () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (data: UpdateItemTaskData) => itemTaskDB.update(data),
   });
 
   return { mutate, isLoading };
