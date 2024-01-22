@@ -5,7 +5,6 @@ import { DrawerEditTask } from "./components/drawerEditTask";
 import { useGetTasks } from "../../services/requests/tasks";
 import { taskListPageStore } from "../../store/taskListPage";
 import { Pagination } from "../../components/pagination";
-import { useTranslation } from "react-i18next";
 import { TaskListCard } from "../../components/taskListCard";
 import { Preloader } from "../../components/preloader";
 
@@ -13,40 +12,20 @@ export const TaskListOpen = () => {
   const {
     filters,
     updatePageNumber,
-    updateSelectedTaskId,
-    updateIsDrawerEditOpen,
   } = taskListPageStore();
   const { data, isLoading } = useGetTasks({ ...filters });
-  const tasks = data?.tasks;
-  const total = data?.total;
-  const { t } = useTranslation();
-
-  const onClickTask = (id: number) => {
-    console.log("click", id);
-  };
-
-  const onEditTask = (id: number) => {
-    updateSelectedTaskId(id);
-    updateIsDrawerEditOpen(true);
-  };
-
-  const onDeleteTask = async (id: number) => {
-    console.log("delete", id);
-  };
 
   return (
     <Content>
       <PageFilter />
 
-      {total ? (
+      {data?.total ? (
         <MainContent>
           <Preloader isLoading={isLoading}>
             <CardListContent>
               <TaskListCard
-                tasks={tasks || []}
-                onClick={onClickTask}
-                onEdit={onEditTask}
-                onDelete={onDeleteTask}
+                tasks={data?.tasks || []}
+                isTaskOpenListPage
               />
             </CardListContent>
 

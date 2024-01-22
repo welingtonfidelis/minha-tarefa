@@ -1,4 +1,4 @@
-import { Card, CardHeader, Grid, Heading, Text } from "@chakra-ui/react";
+import { Card, CardHeader, Grid, Heading, Text, useToast } from "@chakra-ui/react";
 import { Props } from "./types";
 import {
   ActionContainer,
@@ -10,33 +10,76 @@ import {
 } from "./styles";
 import { IconButton } from "../iconButton";
 import { AlertConfirm } from "../alertConfirm";
-import { t } from "i18next";
+import { taskListPageStore } from "../../store/taskListPage";
+import { useDeleteTask, useGetTasks } from "../../services/requests/tasks";
+import { useTranslation } from "react-i18next";
 
 export const TaskListCard = (props: Props) => {
-  const { tasks, onClick, onDelete, onEdit, onRestart } = props;
+  const { tasks, isTaskOpenListPage } = props;
+  const toast = useToast();
+  const { t } = useTranslation();
+  const { updateSelectedTaskId, updateIsDrawerEditOpen, filters } = taskListPageStore();
+  const { refetch: refetchGetOpenedTasks } = useGetTasks(filters);
+  const { mutate: deleteTask, isLoading: deleteTaskLoading } = useDeleteTask();
+  
+  
+  const onClickTask = (id: number) => {
+    console.log("click", id);
+  };
+
+  const onRestartTask = (id: number) => {
+    console.log("restart", id);
+  };
+  
+  const onEditTask = (id: number) => {
+    updateSelectedTaskId(id);
+    updateIsDrawerEditOpen(true);
+  };
+  
+  const onDeleteTask = (id: number) => {
+    deleteTask(id, {
+      onSuccess(data) {
+        toast({
+          title: t(
+            "pages.task_list_open.components.drawer_task.success_request_edit_message"
+          ),
+        });
+
+        refetchGetOpenedTasks();
+        updateIsDrawerEditOpen(false);
+      },
+      onError(error) {
+        toast({
+          title: t(
+            "pages.task_list_open.components.drawer_task.error_request_edit_message"
+          ),
+          status: "error",
+        });
+      },
+    })
+  };
 
   return (
     <Grid templateColumns="repeat(2, 1fr)" gap={2}>
       {tasks?.map((item) => {
         return (
           <Card key={item.id} variant="outline" size="sm">
-            <CardHeader onClick={() => onClick(item.id)}>
+            <CardHeader onClick={() => onClickTask(item.id)}>
               <Heading size="md">{item.name}</Heading>
             </CardHeader>
 
             <CardBodyContainer>
-              <DescriptionContainer onClick={() => onClick(item.id)}>
+              <DescriptionContainer onClick={() => onClickTask(item.id)}>
                 <Text pt="2" fontSize="sm">
                   {item.description}
                 </Text>
               </DescriptionContainer>
               <ActionContainer>
-                {onDelete && (
                   <AlertConfirm
                     description={t(
                       "components.task_list.alert_description_delete_task"
                     )}
-                    onConfirm={() => onDelete(item.id)}
+                    onConfirm={async () => onDeleteTask(item.id)}
                   >
                     <IconButton
                       icon={<DeleteIcon />}
@@ -44,13 +87,12 @@ export const TaskListCard = (props: Props) => {
                       title=""
                     />
                   </AlertConfirm>
-                )}
-                {onRestart && (
+                {!isTaskOpenListPage && (
                   <AlertConfirm
                     description={t(
                       "components.task_list.alert_description_reset_task"
                     )}
-                    onConfirm={() => onRestart(item.id)}
+                    onConfirm={async () => onRestartTask(item.id)}
                   >
                     <IconButton
                       icon={<ResetIcon />}
@@ -59,10 +101,10 @@ export const TaskListCard = (props: Props) => {
                     />
                   </AlertConfirm>
                 )}
-                {onEdit && (
+                {isTaskOpenListPage && (
                   <IconButton
                     icon={<EditIcon />}
-                    onClick={() => onEdit(item.id)}
+                    onClick={async () => onEditTask(item.id)}
                     title=""
                   />
                 )}

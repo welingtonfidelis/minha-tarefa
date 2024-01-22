@@ -23,6 +23,14 @@ export const useUpdateTask = () => {
   return { mutate, isLoading };
 };
 
+export const useDeleteTask = () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (id: number) => taskDB.delete(id),
+  });
+
+  return { mutate, isLoading };
+};
+
 // ===== QUERIES ===== //
 export const useGetTasks = (params: FindTaskParam) => {
   const getQueryKey = () => ["tasks", params];

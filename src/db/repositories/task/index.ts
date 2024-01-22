@@ -89,6 +89,15 @@ class TaskDB {
 
     return;
   }
+
+  async delete(id: number) {
+    const taskDelete = await this.db.tasks.delete(id);
+    console.log("taskDelete: ", taskDelete);
+
+    await itemTaskDB.deleteByTaskId(id);
+
+    return;
+  }
 }
 
 export const taskDB = new TaskDB();
