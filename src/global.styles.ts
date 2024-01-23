@@ -26,7 +26,7 @@ export const GlobalStyles = createGlobalStyle`
     --secondary: #0A2E52; 
     --tertiary: #5B9AD9; 
     --separator:#e2e8f0;
-    --error: #ec1111;
+    --error: #eb0b0b;
     --success: #0fc000;
     --warning: #bfc30a;
     --radius-1: .25rem;
