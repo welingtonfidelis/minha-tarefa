@@ -474,7 +474,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   font-size: 24px;
 `,Gte=De.div`
   background-color: var(--background2);
-`,qte="/assets/empty-box.9104d1d8.png",Qte=De.div`
+`,qte="/minha-tarefa/assets/empty-box.9104d1d8.png",Qte=De.div`
   height: 100%;
   width: 100%;
   display: flex;
