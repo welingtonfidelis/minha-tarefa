@@ -14,6 +14,7 @@ import { PropsWithChildren, useRef } from "react";
 import { ChildrenContainer } from "./styles";
 import { Props } from "./types";
 import { useTranslation } from "react-i18next";
+import { commonStore } from "../../store/commonStore";
 
 export const PopoverConfirm = (props: PropsWithChildren<Props>) => {
   const {
@@ -26,6 +27,7 @@ export const PopoverConfirm = (props: PropsWithChildren<Props>) => {
     children,
   } = props;
   const { t } = useTranslation();
+  const { isMobileScreen } = commonStore();
 
   return (
     <>
@@ -35,7 +37,10 @@ export const PopoverConfirm = (props: PropsWithChildren<Props>) => {
             <PopoverTrigger>
               <ChildrenContainer>{children}</ChildrenContainer>
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent
+              w={{ base: isMobileScreen ? "185px" : "300px" }}
+              background="var(--background)"
+            >
               <PopoverHeader fontWeight="semibold">
                 {title ?? t("generic.alert_title")}
               </PopoverHeader>

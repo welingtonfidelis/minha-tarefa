@@ -16,7 +16,6 @@ import {
   ResetIcon,
 } from "./styles";
 import { IconButton } from "../iconButton";
-import { AlertConfirm } from "../alertConfirm";
 import { taskListOpenPageStore } from "../../store/taskListOpenPage";
 import {
   useDeleteTask,
@@ -26,6 +25,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { DrawerDetailTask } from "./components/drawerDetailTask";
 import { taskListClosedPageStore } from "../../store/taskListClosedPage";
+import { PopoverConfirm } from "../popoverConfirm";
+import { commonStore } from "../../store/commonStore";
 
 export const TaskListCard = (props: Props) => {
   const { tasks, isTaskOpenListPage } = props;
@@ -38,9 +39,10 @@ export const TaskListCard = (props: Props) => {
     filters: filtersOpenList,
   } = taskListOpenPageStore();
   const { filters: filtersCLoseList } = taskListClosedPageStore();
+  const { isMobileScreen } = commonStore();
   const { refetch: refetchGetOpenedTasks } = useGetTasks(filtersOpenList);
   const { refetch: refetchGetClosedTasks } = useGetTasks(filtersCLoseList);
-  const { mutate: deleteTask, isLoading: deleteTaskLoading } = useDeleteTask();
+  const { mutate: deleteTask } = useDeleteTask();
   const { mutate: updateTask } = useUpdateTask();
 
   const onClickTask = (id: number) => {
@@ -64,9 +66,7 @@ export const TaskListCard = (props: Props) => {
       },
       onError(error) {
         toast({
-          title: t(
-            "components.drawer_detail_task.error_request_reset_message"
-          ),
+          title: t("components.drawer_detail_task.error_request_reset_message"),
           status: "error",
         });
       },
@@ -107,7 +107,7 @@ export const TaskListCard = (props: Props) => {
 
   return (
     <>
-      <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+      <Grid templateColumns={`repeat(${isMobileScreen ? '2' : '3'}, 1fr)`} gap={2}>
         {tasks?.map((item) => {
           return (
             <Card key={item.id} variant="outline" size="sm">
@@ -122,32 +122,31 @@ export const TaskListCard = (props: Props) => {
                   </Text>
                 </DescriptionContainer>
                 <ActionContainer>
-                  <AlertConfirm
+                  <PopoverConfirm
                     description={t(
                       "components.task_list.alert_description_delete_task"
                     )}
-                    isLoading={deleteTaskLoading}
-                    onConfirm={async () => onDeleteTask(item.id)}
+                    onConfirm={() => onDeleteTask(item.id)}
                   >
                     <IconButton
                       icon={<DeleteIcon />}
                       onClick={() => {}}
                       title=""
                     />
-                  </AlertConfirm>
+                  </PopoverConfirm>
                   {!isTaskOpenListPage && (
-                    <AlertConfirm
+                    <PopoverConfirm
                       description={t(
                         "components.task_list.alert_description_restart_task"
                       )}
-                      onConfirm={async () => onResetTask(item.id)}
+                      onConfirm={() => onResetTask(item.id)}
                     >
                       <IconButton
                         icon={<ResetIcon />}
                         onClick={() => {}}
                         title=""
                       />
-                    </AlertConfirm>
+                    </PopoverConfirm>
                   )}
                   {isTaskOpenListPage && (
                     <IconButton

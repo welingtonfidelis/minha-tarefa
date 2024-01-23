@@ -24,7 +24,7 @@
     },
     "task_list_open": {
       "page_title": "Lista de tarefas abertas",
-      "input_search_name": "Nome",
+      "input_search_name": "Filtrar tarefa",
       "button_new_task": "Nova Tarefa",
       "components": {
         "drawer_task": {
@@ -46,7 +46,7 @@
     },
     "task_list_close": {
       "page_title": "Lista de tarefas encerradas",
-      "input_search_name": "Nome"
+      "input_search_name": "Filtrar tarefa"
     }
   },
   "generic": {
