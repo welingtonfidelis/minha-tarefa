@@ -7,9 +7,6 @@ const initialState: State = {
     filterByName: "",
     filterByClosed: false,
   },
-  isDrawerEditOpen: false,
-  isDrawerDetailOpen: false,
-  selectedTaskId: 0
 };
 
 export const taskListOpenPageStore = create<State & Action>((set) => ({
@@ -21,17 +18,5 @@ export const taskListOpenPageStore = create<State & Action>((set) => ({
 
   updateFilterByName: (data) => {
     return set((state) => ({ filters: { ...state.filters, filterByName: data } }));
-  },
-
-  updateIsDrawerEditOpen: (data) => {
-    return set((state) => ({ ...state, isDrawerEditOpen: data }));
-  },
-
-  updateIsDrawerDetailOpen: (data) => {
-    return set((state) => ({ ...state, isDrawerDetailOpen: data }));
-  },
-
-  updateSelectedTaskId: (data) => {
-    return set((state) => ({ ...state, selectedTaskId: data }));
   },
 }));

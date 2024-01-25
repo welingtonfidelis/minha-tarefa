@@ -10,7 +10,7 @@ import {
   FormikHelpers,
   FormikProps,
 } from "formik";
-import { FormProps } from "./types";
+import { FormProps, Props } from "./types";
 import { formValidate } from "./helper/formValidate";
 import {
   Button,
@@ -26,22 +26,20 @@ import { IconButton } from "../iconButton";
 import {
   useCreateTask,
   useGetTaskById,
-  useGetTasks,
   useUpdateTask,
 } from "../../services/requests/tasks";
-import { taskListOpenPageStore } from "../../store/taskListOpenPage";
+import { drawerEditTaskStore } from "../../store/drawerEditTask";
 
-export const DrawerEditTask = () => {
+export const DrawerEditTask = (props: Props) => {
+  const { onAfterSave } = props;
   const { t } = useTranslation();
   const validateFormFields = formValidate();
   const {
-    filters,
+    isDrawerOpen,
     selectedTaskId,
-    isDrawerEditOpen,
     updateSelectedTaskId,
-    updateIsDrawerEditOpen,
-  } = taskListOpenPageStore();
-  const { refetch } = useGetTasks(filters);
+    updateIsDrawerOpen,
+  } = drawerEditTaskStore();
   const { mutate: createTask, isLoading: createTaskLoading } = useCreateTask();
   const { mutate: updateTask, isLoading: updateTaskLoading } = useUpdateTask();
   const {
@@ -63,11 +61,11 @@ export const DrawerEditTask = () => {
 
   const onClose = () => {
     updateSelectedTaskId(0);
-    updateIsDrawerEditOpen(false);
+    updateIsDrawerOpen(false);
   };
 
   const onSave = () => {
-    refetch();
+    onAfterSave();
     onClose();
   };
 
@@ -130,7 +128,7 @@ export const DrawerEditTask = () => {
           : t("pages.task_list_open.components.drawer_task.new_task_title")
       }
       onConfirm={() => formRef.current?.handleSubmit()}
-      isOpen={isDrawerEditOpen}
+      isOpen={isDrawerOpen}
       onClose={onClose}
       onConfirmLoading={createTaskLoading ?? updateTaskLoading}
     >

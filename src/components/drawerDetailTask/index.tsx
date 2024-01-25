@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Drawer } from "../../../drawer";
-import { taskListOpenPageStore } from "../../../../store/taskListOpenPage";
-import { Preloader } from "../../../preloader";
+import { Drawer } from "../drawer";
+import { Preloader } from "../preloader";
 import {
   Accordion,
   AccordionButton,
@@ -16,21 +15,26 @@ import {
 import {
   useCloseTask,
   useGetTaskById,
-  useGetTasks,
   useUpdateItemTask,
-} from "../../../../services/requests/tasks";
+} from "../../services/requests/tasks";
 import { ButtonContent, Content, ItemsContent, SectionContent } from "./styles";
 import { useQueryClient } from "react-query";
-import { taskListClosedPageStore } from "../../../../store/taskListClosedPage";
 import { Props } from "./types";
+import { drawerDetailTaskStore } from "../../store/drawerDetailTask";
+import { commonStore } from "../../store/commonStore";
 
 export const DrawerDetailTask = (props: Props) => {
-  const { isDrawerOpen, onClose, selectedTaskId, isTaskListOpenPage } = props;
+  const { onAfterSave } = props;
   const { t } = useTranslation();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { filters: filtersOpenList } = taskListOpenPageStore();
-  const { filters: filtersCLoseList } = taskListClosedPageStore();
+  const { isTaskListOpenPageSelected } = commonStore();
+  const {
+    isDrawerOpen,
+    selectedTaskId,
+    updateIsDrawerOpen,
+    updateSelectedTaskId,
+  } = drawerDetailTaskStore();
   const { mutate: updateItemTask } = useUpdateItemTask();
   const { mutate: closeTask, isLoading: isCloseTaskLoading } = useCloseTask();
   const {
@@ -38,8 +42,16 @@ export const DrawerDetailTask = (props: Props) => {
     isLoading: getTaskLoading,
     getQueryKey,
   } = useGetTaskById(selectedTaskId);
-  const { refetch: refetchGetOpenTasks } = useGetTasks(filtersOpenList);
-  const { refetch: refetchGetClosedTasks } = useGetTasks(filtersCLoseList);
+
+  const onClose = () => {
+    updateSelectedTaskId(0);
+    updateIsDrawerOpen(false);
+  };
+
+  const onSave = () => {
+    onAfterSave();
+    onClose();
+  };
 
   const handleCheckedChange = (id: number, isChecked: Boolean) => {
     const checked = isChecked ? 1 : 0;
@@ -80,9 +92,7 @@ export const DrawerDetailTask = (props: Props) => {
           ),
         });
 
-        refetchGetOpenTasks();
-        refetchGetClosedTasks();
-        onClose();
+        onSave()
       },
       onError(error) {
         toast({
@@ -124,7 +134,7 @@ export const DrawerDetailTask = (props: Props) => {
                 return (
                   <Checkbox
                     isChecked={Boolean(item.checked)}
-                    disabled={!isTaskListOpenPage}
+                    disabled={!isTaskListOpenPageSelected}
                     onChange={(e) =>
                       handleCheckedChange(item.id, e.target.checked)
                     }
@@ -137,7 +147,7 @@ export const DrawerDetailTask = (props: Props) => {
             </ItemsContent>
           </SectionContent>
 
-          {isTaskListOpenPage && (
+          {isTaskListOpenPageSelected && (
             <ButtonContent>
               <Button
                 colorScheme="blue"

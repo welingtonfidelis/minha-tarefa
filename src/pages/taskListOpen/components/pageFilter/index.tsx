@@ -3,11 +3,13 @@ import { Button, Input } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { taskListOpenPageStore } from "../../../../store/taskListOpenPage";
 import { Content } from "./styles";
+import { drawerEditTaskStore } from "../../../../store/drawerEditTask";
 
 export const PageFilter = () => {
   const { t } = useTranslation();
 
-  const { filters, updateFilterByName, updateIsDrawerEditOpen } = taskListOpenPageStore();
+  const { filters, updateFilterByName } = taskListOpenPageStore();
+  const { updateIsDrawerOpen } = drawerEditTaskStore();
 
   return (
     <Content>
@@ -24,7 +26,7 @@ export const PageFilter = () => {
       <Button
         minWidth={32}
         colorScheme="blue"
-        onClick={() => updateIsDrawerEditOpen(true)}
+        onClick={() => updateIsDrawerOpen(true)}
       >
         {t("pages.task_list_open.button_new_task")}
       </Button>

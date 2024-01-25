@@ -10,7 +10,7 @@ import { DrawerEditTask } from "../../components/drawerEditTask";
 
 export const TaskListOpen = () => {
   const { filters, updatePageNumber } = taskListOpenPageStore();
-  const { data, isLoading } = useGetTasks({ ...filters });
+  const { data, isLoading, refetch } = useGetTasks({ ...filters });
 
   return (
     <Content>
@@ -34,7 +34,7 @@ export const TaskListOpen = () => {
         <EmptyState />
       )}
 
-      <DrawerEditTask />
+      <DrawerEditTask onAfterSave={() => refetch()} />
     </Content>
   );
 };

@@ -21,53 +21,39 @@ import {
   useDeleteTask,
   useGetTasks,
   useResetTask,
-  useUpdateTask,
 } from "../../services/requests/tasks";
 import { useTranslation } from "react-i18next";
-import { DrawerDetailTask } from "./components/drawerDetailTask";
+import { DrawerDetailTask } from "../drawerDetailTask";
 import { taskListClosedPageStore } from "../../store/taskListClosedPage";
 import { PopoverConfirm } from "../popoverConfirm";
 import { commonStore } from "../../store/commonStore";
 import { DrawerEditTask } from "../drawerEditTask";
+import { drawerEditTaskStore } from "../../store/drawerEditTask";
+import { drawerDetailTaskStore } from "../../store/drawerDetailTask";
 
 export const TaskListItems = (props: Props) => {
   const { tasks } = props;
   const toast = useToast();
   const { t } = useTranslation();
+  const { isMobileScreen, isTaskListOpenPageSelected } = commonStore();
   const {
-    filters: filtersOpenList,
-    selectedTaskId: taskIdOpenPage,
-    updateSelectedTaskId: updateTaskIdOpenPage,
-    updateIsDrawerDetailOpen: updateDrawerDetailOpenPage,
-    updateIsDrawerEditOpen,
-    isDrawerDetailOpen: isDrawerDetailOpenPageOpen,
-    isDrawerEditOpen,
-  } = taskListOpenPageStore();
+    updateIsDrawerOpen: updateIsDrawerEditOpen,
+    updateSelectedTaskId: updateSelectedTaskIdEdit,
+  } = drawerEditTaskStore();
   const {
-    filters: filtersCLoseList,
-    selectedTaskId: taskIdClosePage,
-    updateSelectedTaskId: updateTaskIdClosePage,
-    updateIsDrawerDetailOpen: updateDrawerDetailClosePage,
-    isDrawerDetailOpen: isDrawerDetailClosePageOpen,
-  } = taskListClosedPageStore();
-  const { isTaskListOpenPageSelected } = commonStore();
-  const { isMobileScreen } = commonStore();
+    updateIsDrawerOpen: updateIsDrawerDetailOpen,
+    updateSelectedTaskId: updateSelectedTaskIdDetail,
+  } = drawerDetailTaskStore();
+  const { filters: filtersOpenList } = taskListOpenPageStore();
+  const { filters: filtersCLoseList } = taskListClosedPageStore();
   const { refetch: refetchGetOpenedTasks } = useGetTasks(filtersOpenList);
   const { refetch: refetchGetClosedTasks } = useGetTasks(filtersCLoseList);
   const { mutate: deleteTask } = useDeleteTask();
-  const { mutate: updateTask } = useUpdateTask();
   const { mutate: resetTask } = useResetTask();
 
   const onClickTask = (id: number) => {
-    if (isTaskListOpenPageSelected) {
-      updateTaskIdOpenPage(id);
-      updateDrawerDetailOpenPage(true);
-
-      return;
-    }
-
-    updateTaskIdClosePage(id);
-    updateDrawerDetailClosePage(true);
+    updateSelectedTaskIdDetail(id);
+    updateIsDrawerDetailOpen(true);
   };
 
   const onResetTask = (id: number) => {
@@ -92,7 +78,7 @@ export const TaskListItems = (props: Props) => {
   };
 
   const onEditTask = (id: number) => {
-    updateTaskIdOpenPage(id);
+    updateSelectedTaskIdEdit(id);
     updateIsDrawerEditOpen(true);
   };
 
@@ -121,23 +107,6 @@ export const TaskListItems = (props: Props) => {
         });
       },
     });
-  };
-
-  const onCloseDetailDrawer = () => {
-    updateTaskIdOpenPage(0);
-    updateTaskIdClosePage(0);
-    updateDrawerDetailOpenPage(false);
-    updateDrawerDetailClosePage(false);
-  };
-
-  const onCloseEditDrawer = () => {
-    updateTaskIdOpenPage(0);
-    updateIsDrawerEditOpen(false);
-  };
-
-  const onSaveEditDrawer = () => {
-    refetchGetOpenedTasks();
-    onCloseEditDrawer();
   };
 
   return (
@@ -201,13 +170,14 @@ export const TaskListItems = (props: Props) => {
       </Grid>
 
       <DrawerDetailTask
-        isDrawerOpen={isDrawerDetailOpenPageOpen || isDrawerDetailClosePageOpen}
-        selectedTaskId={taskIdOpenPage || taskIdClosePage}
-        isTaskListOpenPage={isTaskListOpenPageSelected}
-        onClose={onCloseDetailDrawer}
+        onAfterSave={() => {
+          refetchGetOpenedTasks();
+          refetchGetClosedTasks();
+        }}
       />
+
       {isTaskListOpenPageSelected && (
-        <DrawerEditTask />
+        <DrawerEditTask onAfterSave={() => refetchGetOpenedTasks()} />
       )}
     </>
   );
