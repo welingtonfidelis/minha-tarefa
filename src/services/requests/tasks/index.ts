@@ -25,6 +25,22 @@ export const useUpdateTask = () => {
   return { mutate, isLoading };
 };
 
+export const useCloseTask = () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (id: number) => taskDB.updateChecked(id, 1),
+  });
+
+  return { mutate, isLoading };
+};
+
+export const useResetTask = () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (id: number) => taskDB.updateChecked(id, 0),
+  });
+
+  return { mutate, isLoading };
+};
+
 export const useUpdateItemTask = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: (data: UpdateItemTaskData) => itemTaskDB.update(data),

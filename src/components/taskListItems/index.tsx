@@ -20,6 +20,7 @@ import { taskListOpenPageStore } from "../../store/taskListOpenPage";
 import {
   useDeleteTask,
   useGetTasks,
+  useResetTask,
   useUpdateTask,
 } from "../../services/requests/tasks";
 import { useTranslation } from "react-i18next";
@@ -27,33 +28,50 @@ import { DrawerDetailTask } from "./components/drawerDetailTask";
 import { taskListClosedPageStore } from "../../store/taskListClosedPage";
 import { PopoverConfirm } from "../popoverConfirm";
 import { commonStore } from "../../store/commonStore";
+import { DrawerEditTask } from "./components/drawerEditTask";
 
-export const TaskListCard = (props: Props) => {
-  const { tasks, isTaskOpenListPage } = props;
+export const TaskListItems = (props: Props) => {
+  const { tasks } = props;
   const toast = useToast();
   const { t } = useTranslation();
   const {
-    updateSelectedTaskId,
-    updateIsDrawerEditOpen,
-    updateIsDrawerDetailOpen,
     filters: filtersOpenList,
+    selectedTaskId: taskIdOpenPage,
+    updateSelectedTaskId: updateTaskIdOpenPage,
+    updateIsDrawerDetailOpen: updateDrawerDetailOpenPage,
+    updateIsDrawerEditOpen,
+    isDrawerDetailOpen: isDrawerDetailOpenPageOpen,
+    isDrawerEditOpen,
   } = taskListOpenPageStore();
-  const { filters: filtersCLoseList } = taskListClosedPageStore();
+  const {
+    filters: filtersCLoseList,
+    selectedTaskId: taskIdClosePage,
+    updateSelectedTaskId: updateTaskIdClosePage,
+    updateIsDrawerDetailOpen: updateDrawerDetailClosePage,
+    isDrawerDetailOpen: isDrawerDetailClosePageOpen,
+  } = taskListClosedPageStore();
+  const { isTaskListOpenPageSelected } = commonStore();
   const { isMobileScreen } = commonStore();
   const { refetch: refetchGetOpenedTasks } = useGetTasks(filtersOpenList);
   const { refetch: refetchGetClosedTasks } = useGetTasks(filtersCLoseList);
   const { mutate: deleteTask } = useDeleteTask();
   const { mutate: updateTask } = useUpdateTask();
+  const { mutate: resetTask } = useResetTask();
 
   const onClickTask = (id: number) => {
-    updateSelectedTaskId(id);
-    updateIsDrawerDetailOpen(true);
+    if (isTaskListOpenPageSelected) {
+      updateTaskIdOpenPage(id);
+      updateDrawerDetailOpenPage(true);
+
+      return;
+    }
+
+    updateTaskIdClosePage(id);
+    updateDrawerDetailClosePage(true);
   };
 
   const onResetTask = (id: number) => {
-    const updateTaskData = { id, checked: 0 } as any;
-
-    updateTask(updateTaskData, {
+    resetTask(id, {
       onSuccess(data) {
         toast({
           title: t(
@@ -74,7 +92,7 @@ export const TaskListCard = (props: Props) => {
   };
 
   const onEditTask = (id: number) => {
-    updateSelectedTaskId(id);
+    updateTaskIdOpenPage(id);
     updateIsDrawerEditOpen(true);
   };
 
@@ -87,7 +105,7 @@ export const TaskListCard = (props: Props) => {
           ),
         });
 
-        if (isTaskOpenListPage) {
+        if (isTaskListOpenPageSelected) {
           refetchGetOpenedTasks();
           return;
         }
@@ -105,9 +123,29 @@ export const TaskListCard = (props: Props) => {
     });
   };
 
+  const onCloseDetailDrawer = () => {
+    updateTaskIdOpenPage(0);
+    updateTaskIdClosePage(0);
+    updateDrawerDetailOpenPage(false);
+    updateDrawerDetailClosePage(false);
+  };
+
+  const onCloseEditDrawer = () => {
+    updateTaskIdOpenPage(0);
+    updateIsDrawerEditOpen(false);
+  };
+
+  const onSaveEditDrawer = () => {
+    refetchGetOpenedTasks();
+    onCloseEditDrawer();
+  };
+
   return (
     <>
-      <Grid templateColumns={`repeat(${isMobileScreen ? '2' : '3'}, 1fr)`} gap={2}>
+      <Grid
+        templateColumns={`repeat(${isMobileScreen ? "2" : "3"}, 1fr)`}
+        gap={2}
+      >
         {tasks?.map((item) => {
           return (
             <Card key={item.id} variant="outline" size="sm">
@@ -134,7 +172,7 @@ export const TaskListCard = (props: Props) => {
                       title=""
                     />
                   </PopoverConfirm>
-                  {!isTaskOpenListPage && (
+                  {!isTaskListOpenPageSelected && (
                     <PopoverConfirm
                       description={t(
                         "components.task_list.alert_description_restart_task"
@@ -148,7 +186,7 @@ export const TaskListCard = (props: Props) => {
                       />
                     </PopoverConfirm>
                   )}
-                  {isTaskOpenListPage && (
+                  {isTaskListOpenPageSelected && (
                     <IconButton
                       icon={<EditIcon />}
                       onClick={async () => onEditTask(item.id)}
@@ -162,7 +200,20 @@ export const TaskListCard = (props: Props) => {
         })}
       </Grid>
 
-      <DrawerDetailTask isTaskOpenListPage={isTaskOpenListPage} />
+      <DrawerDetailTask
+        isDrawerOpen={isDrawerDetailOpenPageOpen || isDrawerDetailClosePageOpen}
+        selectedTaskId={taskIdOpenPage || taskIdClosePage}
+        isTaskListOpenPage={isTaskListOpenPageSelected}
+        onClose={onCloseDetailDrawer}
+      />
+      {isTaskListOpenPageSelected && (
+        <DrawerEditTask
+          isDrawerOpen={isDrawerEditOpen}
+          selectedTaskId={taskIdOpenPage}
+          onClose={onCloseEditDrawer}
+          onSave={onSaveEditDrawer}
+        />
+      )}
     </>
   );
 };

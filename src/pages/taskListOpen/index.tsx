@@ -1,18 +1,14 @@
 import { EmptyState } from "../../components/emptyState";
 import { CardListContent, Content, MainContent } from "./styles";
 import { PageFilter } from "./components/pageFilter";
-import { DrawerEditTask } from "./components/drawerEditTask";
 import { useGetTasks } from "../../services/requests/tasks";
 import { taskListOpenPageStore } from "../../store/taskListOpenPage";
 import { Pagination } from "../../components/pagination";
-import { TaskListCard } from "../../components/taskListCard";
+import { TaskListItems } from "../../components/taskListItems";
 import { Preloader } from "../../components/preloader";
 
 export const TaskListOpen = () => {
-  const {
-    filters,
-    updatePageNumber,
-  } = taskListOpenPageStore();
+  const { filters, updatePageNumber } = taskListOpenPageStore();
   const { data, isLoading } = useGetTasks({ ...filters });
 
   return (
@@ -23,10 +19,7 @@ export const TaskListOpen = () => {
         <MainContent>
           <Preloader isLoading={isLoading}>
             <CardListContent>
-              <TaskListCard
-                tasks={data?.tasks || []}
-                isTaskOpenListPage
-              />
+              <TaskListItems tasks={data?.tasks || []} />
             </CardListContent>
 
             <Pagination
@@ -39,8 +32,6 @@ export const TaskListOpen = () => {
       ) : (
         <EmptyState />
       )}
-
-      <DrawerEditTask />
     </Content>
   );
 };

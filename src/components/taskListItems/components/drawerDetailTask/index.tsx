@@ -14,31 +14,25 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import {
+  useCloseTask,
   useGetTaskById,
   useGetTasks,
   useUpdateItemTask,
-  useUpdateTask,
 } from "../../../../services/requests/tasks";
-import { Props } from "./types";
 import { ButtonContent, Content, ItemsContent, SectionContent } from "./styles";
 import { useQueryClient } from "react-query";
 import { taskListClosedPageStore } from "../../../../store/taskListClosedPage";
+import { Props } from "./types";
 
 export const DrawerDetailTask = (props: Props) => {
+  const { isDrawerOpen, onClose, selectedTaskId, isTaskListOpenPage } = props;
   const { t } = useTranslation();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const {
-    filters: filtersOpenList,
-    isDrawerDetailOpen,
-    selectedTaskId,
-    updateIsDrawerDetailOpen,
-    updateSelectedTaskId,
-  } = taskListOpenPageStore();
-  const { filters: filtersCLoseList} = taskListClosedPageStore();
+  const { filters: filtersOpenList } = taskListOpenPageStore();
+  const { filters: filtersCLoseList } = taskListClosedPageStore();
   const { mutate: updateItemTask } = useUpdateItemTask();
-  const { mutate: updateTask, isLoading: isUpdateTaskLoading } =
-    useUpdateTask();
+  const { mutate: closeTask, isLoading: isCloseTaskLoading } = useCloseTask();
   const {
     data,
     isLoading: getTaskLoading,
@@ -46,11 +40,6 @@ export const DrawerDetailTask = (props: Props) => {
   } = useGetTaskById(selectedTaskId);
   const { refetch: refetchGetOpenTasks } = useGetTasks(filtersOpenList);
   const { refetch: refetchGetClosedTasks } = useGetTasks(filtersCLoseList);
-
-  const handleClose = () => {
-    updateSelectedTaskId(0);
-    updateIsDrawerDetailOpen(false);
-  };
 
   const handleCheckedChange = (id: number, isChecked: Boolean) => {
     const checked = isChecked ? 1 : 0;
@@ -83,9 +72,7 @@ export const DrawerDetailTask = (props: Props) => {
   };
 
   const handleCloseTask = () => {
-    const updateTaskData = { id: selectedTaskId, checked: 1 } as any;
-
-    updateTask(updateTaskData, {
+    closeTask(selectedTaskId, {
       onSuccess(data) {
         toast({
           title: t(
@@ -95,7 +82,7 @@ export const DrawerDetailTask = (props: Props) => {
 
         refetchGetOpenTasks();
         refetchGetClosedTasks();
-        updateIsDrawerDetailOpen(false);
+        onClose();
       },
       onError(error) {
         toast({
@@ -111,8 +98,8 @@ export const DrawerDetailTask = (props: Props) => {
   return (
     <Drawer
       title={data?.name ?? ""}
-      isOpen={isDrawerDetailOpen}
-      onClose={handleClose}
+      isOpen={isDrawerOpen}
+      onClose={onClose}
       onCloseButtonText={t("generic.button_back")}
     >
       <Preloader isLoading={getTaskLoading}>
@@ -137,6 +124,7 @@ export const DrawerDetailTask = (props: Props) => {
                 return (
                   <Checkbox
                     isChecked={Boolean(item.checked)}
+                    disabled={!isTaskListOpenPage}
                     onChange={(e) =>
                       handleCheckedChange(item.id, e.target.checked)
                     }
@@ -149,15 +137,17 @@ export const DrawerDetailTask = (props: Props) => {
             </ItemsContent>
           </SectionContent>
 
-          <ButtonContent>
-            <Button
-              colorScheme="blue"
-              onClick={handleCloseTask}
-              isLoading={isUpdateTaskLoading}
-            >
-              {t("components.drawer_detail_task.button_done_task")}
-            </Button>
-          </ButtonContent>
+          {isTaskListOpenPage && (
+            <ButtonContent>
+              <Button
+                colorScheme="blue"
+                onClick={handleCloseTask}
+                isLoading={isCloseTaskLoading}
+              >
+                {t("components.drawer_detail_task.button_done_task")}
+              </Button>
+            </ButtonContent>
+          )}
         </Content>
       </Preloader>
     </Drawer>

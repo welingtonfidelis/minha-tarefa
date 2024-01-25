@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { State, Action } from "./types";
 
-const initialState = {
+const initialState: State = {
   isMobileScreen: false,
+  isTaskListOpenPageSelected: true
 };
 
 export const commonStore = create<State & Action>((set) => {
@@ -12,5 +13,9 @@ export const commonStore = create<State & Action>((set) => {
   return {
     ...initialState,
     isMobileScreen,
+
+    updateIsTaskListOpenPageSelected: (data) => {
+      return set((state) => ({ ...state, isTaskListOpenPageSelected: data }));
+    },
   };
 });

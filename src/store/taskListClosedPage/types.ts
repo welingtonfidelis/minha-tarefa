@@ -1,8 +1,3 @@
-export const FiltersType = {
-  PAGE: 'page',
-  FILTER_BY_NAME: 'filter_by_name',
-}
-
 export type State = {
   filters: {
     page: number;

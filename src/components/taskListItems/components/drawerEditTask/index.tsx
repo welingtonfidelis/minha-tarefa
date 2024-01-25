@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Drawer } from "../../../../components/drawer";
-import { taskListOpenPageStore } from "../../../../store/taskListOpenPage";
-import { Preloader } from "../../../../components/preloader";
+import { Drawer } from "../../../drawer";
+import { Preloader } from "../../../preloader";
 import { useMemo, useRef } from "react";
 import {
   Field,
@@ -11,7 +10,7 @@ import {
   FormikHelpers,
   FormikProps,
 } from "formik";
-import { FormProps } from "./types";
+import { FormProps, Props } from "./types";
 import { formValidate } from "./helper/formValidate";
 import {
   Button,
@@ -23,28 +22,24 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { IconMinus, ItemContent, ItemInputContent } from "./styles";
-import { IconButton } from "../../../../components/iconButton";
+import { IconButton } from "../../../iconButton";
 import {
   useCreateTask,
   useGetTaskById,
-  useGetTasks,
   useUpdateTask,
 } from "../../../../services/requests/tasks";
 
-export const DrawerEditTask = () => {
+export const DrawerEditTask = (props: Props) => {
+  const { isDrawerOpen, selectedTaskId, onClose, onSave } = props;
   const { t } = useTranslation();
-  const {
-    filters,
-    isDrawerEditOpen,
-    selectedTaskId,
-    updateIsDrawerEditOpen,
-    updateSelectedTaskId,
-  } = taskListOpenPageStore();
   const validateFormFields = formValidate();
   const { mutate: createTask, isLoading: createTaskLoading } = useCreateTask();
   const { mutate: updateTask, isLoading: updateTaskLoading } = useUpdateTask();
-  const { data, refetch: refetchGetTaskById, isLoading: getTaskLoading } = useGetTaskById(selectedTaskId);
-  const { refetch: refetchGetTasks } = useGetTasks(filters);
+  const {
+    data,
+    refetch: refetchGetTaskById,
+    isLoading: getTaskLoading,
+  } = useGetTaskById(selectedTaskId);
   const toast = useToast();
   const formRef = useRef<FormikProps<FormProps>>(null);
 
@@ -71,9 +66,8 @@ export const DrawerEditTask = () => {
             ),
           });
 
-          refetchGetTasks();
           refetchGetTaskById();
-          updateIsDrawerEditOpen(false);
+          onSave();
         },
         onError(error) {
           toast({
@@ -96,8 +90,7 @@ export const DrawerEditTask = () => {
           ),
         });
 
-        refetchGetTasks();
-        updateIsDrawerEditOpen(false);
+        onSave();
       },
       onError(error) {
         toast({
@@ -110,12 +103,6 @@ export const DrawerEditTask = () => {
     });
   };
 
-  const handleClose = () => {
-    if (selectedTaskId) updateSelectedTaskId(0);
-
-    updateIsDrawerEditOpen(false);
-  };
-
   return (
     <Drawer
       title={
@@ -124,8 +111,8 @@ export const DrawerEditTask = () => {
           : t("pages.task_list_open.components.drawer_task.new_task_title")
       }
       onConfirm={() => formRef.current?.handleSubmit()}
-      isOpen={isDrawerEditOpen}
-      onClose={handleClose}
+      isOpen={isDrawerOpen}
+      onClose={onClose}
       onConfirmLoading={createTaskLoading ?? updateTaskLoading}
     >
       <Preloader isLoading={getTaskLoading}>

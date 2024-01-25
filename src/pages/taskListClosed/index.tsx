@@ -3,15 +3,12 @@ import { CardListContent, Content, MainContent } from "./styles";
 import { PageFilter } from "./components/pageFilter";
 import { useGetTasks } from "../../services/requests/tasks";
 import { Pagination } from "../../components/pagination";
-import { TaskListCard } from "../../components/taskListCard";
+import { TaskListItems } from "../../components/taskListItems";
 import { Preloader } from "../../components/preloader";
 import { taskListClosedPageStore } from "../../store/taskListClosedPage";
 
 export const TaskListClosed = () => {
-  const {
-    filters,
-    updatePageNumber,
-  } = taskListClosedPageStore();
+  const { filters, updatePageNumber } = taskListClosedPageStore();
   const { data, isLoading } = useGetTasks(filters);
 
   return (
@@ -22,10 +19,7 @@ export const TaskListClosed = () => {
         <MainContent>
           <Preloader isLoading={isLoading}>
             <CardListContent>
-              <TaskListCard
-                tasks={data?.tasks || []}
-                isTaskOpenListPage={false}
-              />
+              <TaskListItems tasks={data?.tasks || []} />
             </CardListContent>
 
             <Pagination
@@ -38,7 +32,6 @@ export const TaskListClosed = () => {
       ) : (
         <EmptyState />
       )}
-
     </Content>
   );
 };

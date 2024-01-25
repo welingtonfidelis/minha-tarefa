@@ -9,13 +9,15 @@ import {
 } from "./styles";
 import { TaskListOpen } from "../taskListOpen";
 import { TaskListClosed } from "../taskListClosed";
+import { commonStore } from "../../store/commonStore";
 
 export const MainPage = () => {
+  const { updateIsTaskListOpenPageSelected } = commonStore();
   // const { isMobileScreen } = commonStore();
 
   return (
     <Content>
-      <Tabs isFitted variant="enclosed" height="auto">
+      <Tabs isFitted variant="enclosed" height="auto" onChange={(index) => updateIsTaskListOpenPageSelected(!index)}>
         <MainContent>
           <TabPanels>
             <TabPanel paddingBottom={0}>

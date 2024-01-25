@@ -87,7 +87,17 @@ class TaskDB {
       }
     }
 
-    return;
+    return taskUpdated;
+  }
+
+  async updateChecked(id: number, checked: 1 | 0) {
+    const taskUpdated = await this.db.tasks.update(id, { checked });
+
+    if(taskUpdated) {
+      await itemTaskDB.updateCheckedByTaskId(id, checked);
+    }
+
+    return taskUpdated;
   }
 
   async delete(id: number) {
