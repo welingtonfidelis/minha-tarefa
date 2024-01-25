@@ -6,6 +6,7 @@ import { taskListOpenPageStore } from "../../store/taskListOpenPage";
 import { Pagination } from "../../components/pagination";
 import { TaskListItems } from "../../components/taskListItems";
 import { Preloader } from "../../components/preloader";
+import { DrawerEditTask } from "../../components/drawerEditTask";
 
 export const TaskListOpen = () => {
   const { filters, updatePageNumber } = taskListOpenPageStore();
@@ -32,6 +33,8 @@ export const TaskListOpen = () => {
       ) : (
         <EmptyState />
       )}
+
+      <DrawerEditTask />
     </Content>
   );
 };

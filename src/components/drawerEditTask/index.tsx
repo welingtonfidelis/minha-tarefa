@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Drawer } from "../../../drawer";
-import { Preloader } from "../../../preloader";
+import { Drawer } from "../drawer";
+import { Preloader } from "../preloader";
 import { useMemo, useRef } from "react";
 import {
   Field,
@@ -10,7 +10,7 @@ import {
   FormikHelpers,
   FormikProps,
 } from "formik";
-import { FormProps, Props } from "./types";
+import { FormProps } from "./types";
 import { formValidate } from "./helper/formValidate";
 import {
   Button,
@@ -22,17 +22,26 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { IconMinus, ItemContent, ItemInputContent } from "./styles";
-import { IconButton } from "../../../iconButton";
+import { IconButton } from "../iconButton";
 import {
   useCreateTask,
   useGetTaskById,
+  useGetTasks,
   useUpdateTask,
-} from "../../../../services/requests/tasks";
+} from "../../services/requests/tasks";
+import { taskListOpenPageStore } from "../../store/taskListOpenPage";
 
-export const DrawerEditTask = (props: Props) => {
-  const { isDrawerOpen, selectedTaskId, onClose, onSave } = props;
+export const DrawerEditTask = () => {
   const { t } = useTranslation();
   const validateFormFields = formValidate();
+  const {
+    filters,
+    selectedTaskId,
+    isDrawerEditOpen,
+    updateSelectedTaskId,
+    updateIsDrawerEditOpen,
+  } = taskListOpenPageStore();
+  const { refetch } = useGetTasks(filters);
   const { mutate: createTask, isLoading: createTaskLoading } = useCreateTask();
   const { mutate: updateTask, isLoading: updateTaskLoading } = useUpdateTask();
   const {
@@ -51,6 +60,16 @@ export const DrawerEditTask = (props: Props) => {
     }),
     [data]
   );
+
+  const onClose = () => {
+    updateSelectedTaskId(0);
+    updateIsDrawerEditOpen(false);
+  };
+
+  const onSave = () => {
+    refetch();
+    onClose();
+  };
 
   const handleSubmit = async (
     values: FormProps,
@@ -111,7 +130,7 @@ export const DrawerEditTask = (props: Props) => {
           : t("pages.task_list_open.components.drawer_task.new_task_title")
       }
       onConfirm={() => formRef.current?.handleSubmit()}
-      isOpen={isDrawerOpen}
+      isOpen={isDrawerEditOpen}
       onClose={onClose}
       onConfirmLoading={createTaskLoading ?? updateTaskLoading}
     >

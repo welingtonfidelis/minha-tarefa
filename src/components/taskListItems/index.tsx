@@ -28,7 +28,7 @@ import { DrawerDetailTask } from "./components/drawerDetailTask";
 import { taskListClosedPageStore } from "../../store/taskListClosedPage";
 import { PopoverConfirm } from "../popoverConfirm";
 import { commonStore } from "../../store/commonStore";
-import { DrawerEditTask } from "./components/drawerEditTask";
+import { DrawerEditTask } from "../drawerEditTask";
 
 export const TaskListItems = (props: Props) => {
   const { tasks } = props;
@@ -207,12 +207,7 @@ export const TaskListItems = (props: Props) => {
         onClose={onCloseDetailDrawer}
       />
       {isTaskListOpenPageSelected && (
-        <DrawerEditTask
-          isDrawerOpen={isDrawerEditOpen}
-          selectedTaskId={taskIdOpenPage}
-          onClose={onCloseEditDrawer}
-          onSave={onSaveEditDrawer}
-        />
+        <DrawerEditTask />
       )}
     </>
   );
