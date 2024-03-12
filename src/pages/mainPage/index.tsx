@@ -1,4 +1,11 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Tooltip,
+} from "@chakra-ui/react";
 
 import {
   Content,
@@ -10,14 +17,21 @@ import {
 import { TaskListOpen } from "../taskListOpen";
 import { TaskListClosed } from "../taskListClosed";
 import { commonStore } from "../../store/commonStore";
+import { useTranslation } from "react-i18next";
 
 export const MainPage = () => {
+  const { t } = useTranslation();
   const { updateIsTaskListOpenPageSelected } = commonStore();
   // const { isMobileScreen } = commonStore();
 
   return (
     <Content>
-      <Tabs isFitted variant="enclosed" height="auto" onChange={(index) => updateIsTaskListOpenPageSelected(!index)}>
+      <Tabs
+        isFitted
+        variant="enclosed"
+        height="auto"
+        onChange={(index) => updateIsTaskListOpenPageSelected(!index)}
+      >
         <MainContent>
           <TabPanels>
             <TabPanel paddingBottom={0}>
@@ -31,12 +45,17 @@ export const MainPage = () => {
 
         <TabContent>
           <TabList>
-            <Tab>
-              <IconClipboardList />
-            </Tab>
-            <Tab>
-              <IconCheckCircle />
-            </Tab>
+            <Tooltip label={t("pages.main_page.todo_tab_tooltip")} hasArrow>
+              <Tab>
+                <IconClipboardList />
+              </Tab>
+            </Tooltip>
+
+            <Tooltip label={t("pages.main_page.done_tab_tooltip")} hasArrow>
+              <Tab>
+                <IconCheckCircle />
+              </Tab>
+            </Tooltip>
           </TabList>
         </TabContent>
       </Tabs>

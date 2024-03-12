@@ -22,6 +22,10 @@
       "title_message": "Oops!",
       "description_message": "Página não encontrada"
     },
+    "main_page": {
+      "todo_tab_tooltip": "Tarefas à fazer",
+      "done_tab_tooltip": "Tarefas feitas"
+    },
     "task_list_open": {
       "page_title": "Lista de tarefas abertas",
       "input_search_name": "Filtrar tarefa",
